@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Takamura.API", "Takamura.API\Takamura.API.csproj", "{F7B4C28F-965D-44D2-9477-32CB5C20C155}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Takamura.Application", "Takamura.Application\Takamura.Application.csproj", "{149F6D8D-9133-41FC-920C-63ACE370F0BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{F7B4C28F-965D-44D2-9477-32CB5C20C155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7B4C28F-965D-44D2-9477-32CB5C20C155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7B4C28F-965D-44D2-9477-32CB5C20C155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{149F6D8D-9133-41FC-920C-63ACE370F0BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{149F6D8D-9133-41FC-920C-63ACE370F0BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{149F6D8D-9133-41FC-920C-63ACE370F0BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{149F6D8D-9133-41FC-920C-63ACE370F0BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
