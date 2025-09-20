@@ -10,5 +10,5 @@ public class SubCategoryEntity  : EntityBase
     public required string Description { get; set; }
     
     public required int CategoryId { get; set; }
-    public CategoryEntity CategoryEntity { get; set; } = null!;
+    public CategoryEntity Category { get; set; } = null!;
 }

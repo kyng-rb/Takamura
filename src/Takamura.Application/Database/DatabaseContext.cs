@@ -15,6 +15,12 @@ public class DatabaseContext : DbContext
         
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
+        base.OnModelCreating(modelBuilder);
+    }
+    
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<decimal>()
@@ -24,7 +30,11 @@ public class DatabaseContext : DbContext
             .HaveColumnType("varchar(100)");
         
         configurationBuilder.Properties<Enum>()
-            .HaveConversion<string>();
+            .HaveConversion<string>()
+            .HaveColumnType("varchar(20)");
+
+        configurationBuilder.Properties<DateTime>()
+            .HaveColumnType("datetime");
         
         base.ConfigureConventions(configurationBuilder);
     }

@@ -40,7 +40,7 @@ public class RetrieveBillsService(DatabaseContext context)
         if (options.CategoryId is not null)
             query = query.Where(bill => bill.SubCategory!.CategoryId == options.CategoryId);
         
-        query = query.Include(s => s.SubCategory!.CategoryEntity)
+        query = query.Include(s => s.SubCategory!.Category)
             .Include(x => x.SubCategory)
             .OrderBy(w => w.Date);
         
@@ -69,7 +69,7 @@ public record RetrieveSingleBillOutput(
             billEntity.Amount,
             billEntity.Date,
             billEntity.BudgetId,
-            billEntity.SubCategory!.CategoryEntity.Description,
+            billEntity.SubCategory!.Category.Description,
             billEntity.SubCategory.Description);
     }
 }
