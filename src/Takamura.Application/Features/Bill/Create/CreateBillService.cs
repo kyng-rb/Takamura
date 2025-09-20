@@ -1,6 +1,7 @@
 using FluentResults;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Enums;
+using Takamura.Application.Database.Entities.Base.Enums;
+using Takamura.Application.Database.Entities.Bill;
 
 namespace Takamura.Application.Features.Bill.Create;
 
@@ -30,7 +31,7 @@ public class CreateBillService(DatabaseContext context)
         
         var entity = input.ToEntity();
         
-        context.Add(entity);
+        _context.Add(entity);
         _ = await _context.SaveChangesAsync().ConfigureAwait(false);
         return Result.Ok(entity.Id);
     }
@@ -38,17 +39,18 @@ public class CreateBillService(DatabaseContext context)
 
 public record CreateBillServiceInput(DateOnly Date, decimal Amount, string Description, int BudgetId, int SubCategoryId)
 {
-    public Database.Entities.Bill ToEntity()
+    public BillEntity ToEntity()
     {
-        return new Database.Entities.Bill
+        return new BillEntity
         {
             Id = 0,
             Date = Date,
             Amount = Amount,
             Description = Description,
-            State = Status.Created,
             SubCategoryId = SubCategoryId,
             BudgetId = BudgetId,
+            CreatedAt = DateTime.UtcNow,
+            Status = Status.Created
         };
     }
 }

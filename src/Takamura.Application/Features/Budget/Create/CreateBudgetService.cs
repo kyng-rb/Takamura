@@ -1,8 +1,9 @@
 using FluentResults;
 using Humanizer;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Entities;
-using Takamura.Application.Database.Enums;
+using Takamura.Application.Database.Entities.Base.Enums;
+using Takamura.Application.Database.Entities.Budget;
+using Takamura.Application.Database.Entities.BudgetAllocation;
 
 namespace Takamura.Application.Features.Budget.Create;
 
@@ -34,7 +35,7 @@ public class CreateBudgetService(DatabaseContext context)
 
         var entity = input.ToEntity();
         _context.Add(entity);
-        _ = await _context.SaveChangesAsync();
+        _ = await _context.SaveChangesAsync().ConfigureAwait(false);
         
         return Result.Ok(entity.Id);
     }
@@ -42,32 +43,34 @@ public class CreateBudgetService(DatabaseContext context)
 
 public record CreateBudgetServiceInput(string Title, decimal Amount, BudgetAllocationInput[] Allocations)
 {
-    public Database.Entities.Budget ToEntity()
+    public BudgetEntity ToEntity()
     {
-        return new Database.Entities.Budget
+        return new BudgetEntity
         {
             Id = 0,
             Title = Title,
-            Amount = Amount,
-            State = Status.Created,
-            BudgetAllocations = Allocations.Select(allocation => allocation.ToEntity(0)).ToList()
+            BudgetAllocations = Allocations.Select(allocation => allocation.ToEntity(0))
+                .ToList(),
+            CreatedAt = DateTime.UtcNow,
+            Status = Status.Created
         };
     }
 }
 
 public record BudgetAllocationInput(int SubCategoryId, DateOnly From, DateOnly To, decimal Amount)
 {
-    public BudgetAllocation ToEntity(int budgetId)
+    internal BudgetAllocationEntity ToEntity(int budgetId)
     {
-        return new BudgetAllocation
+        return new BudgetAllocationEntity
         {
             Id = 0,
             Amount = Amount,
-            State = Status.Created,
             From = From,
             To = To,
             SubCategoryId = SubCategoryId,
-            BudgetId = budgetId
+            BudgetId = budgetId,
+            CreatedAt = DateTime.UtcNow,
+            Status = Status.Created
         };
     }
 }

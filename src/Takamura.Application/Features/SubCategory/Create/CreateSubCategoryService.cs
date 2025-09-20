@@ -1,6 +1,7 @@
 using FluentResults;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Enums;
+using Takamura.Application.Database.Entities.Base.Enums;
+using Takamura.Application.Database.Entities.SubCategory;
 
 namespace Takamura.Application.Features.SubCategory.Create;
 
@@ -29,14 +30,15 @@ public class CreateSubCategoryService(DatabaseContext context)
 
 public record CreateSubCategoryServiceInput(int CategoryId, string Description)
 {
-    public Database.Entities.SubCategory ToEntity()
+    public SubCategoryEntity ToEntity()
     {
-        return new Database.Entities.SubCategory
+        return new SubCategoryEntity
         {
             Id = 0,
             Description = Description,
-            State = Status.Created,
-            CategoryId = CategoryId
+            CategoryId = CategoryId,
+            CreatedAt = DateTime.UtcNow,
+            Status = Status.Created
         };
     }
 }

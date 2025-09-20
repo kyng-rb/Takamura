@@ -1,6 +1,7 @@
 using FluentResults;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Enums;
+using Takamura.Application.Database.Entities.Base.Enums;
+using Takamura.Application.Database.Entities.Category;
 
 namespace Takamura.Application.Features.Category.Create;
 
@@ -23,11 +24,12 @@ public class CreateCategoryService(DatabaseContext context)
 
 public record CreateCategoryServiceInput(string Description)
 {
-    public Database.Entities.Category ToEntity() 
-        => new Database.Entities.Category
+    public CategoryEntity ToEntity() 
+        => new()
         {
             Id = 0,
             Description = Description,
-            State = Status.Created
+            CreatedAt = DateTime.UtcNow,
+            Status = Status.Created
         };
 }
