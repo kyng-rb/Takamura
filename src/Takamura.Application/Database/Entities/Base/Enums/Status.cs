@@ -1,4 +1,4 @@
-namespace Takamura.Application.Database.Enums;
+namespace Takamura.Application.Database.Entities.Base.Enums;
 
 public enum Status
 {
