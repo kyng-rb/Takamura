@@ -48,9 +48,9 @@ public record CreateBillServiceInput(DateOnly Date, decimal Amount, string Descr
             Amount = Amount,
             Description = Description,
             SubCategoryId = SubCategoryId,
-            BudgetId = BudgetId,
             CreatedAt = DateTime.UtcNow,
-            Status = Status.Created
+            Status = Status.Created,
+            MonthlyBudgetId = 0
         };
     }
 }

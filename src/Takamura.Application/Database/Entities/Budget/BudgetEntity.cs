@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Takamura.Application.Database.Entities.Base;
-using Takamura.Application.Database.Entities.BudgetAllocation;
+using Takamura.Application.Database.Entities.MonthlyBudget;
+using Takamura.Application.Database.Entities.SubCategoryBudget;
 
 namespace Takamura.Application.Database.Entities.Budget;
 
@@ -8,6 +9,6 @@ namespace Takamura.Application.Database.Entities.Budget;
 public class BudgetEntity : EntityBase
 {
     public required string Title { get; set; }
-    
-    public List<BudgetAllocationEntity> BudgetAllocations { get; set; } = null!;
+
+    public List<MonthlyBudgetEntity> MonthlyBudgets { get; set; } = new List<MonthlyBudgetEntity>();
 }

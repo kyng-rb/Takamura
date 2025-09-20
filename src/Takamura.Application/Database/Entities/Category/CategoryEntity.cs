@@ -9,5 +9,5 @@ public class CategoryEntity  : EntityBase
 {
     public required string Description { get; set; }
 
-    public List<SubCategoryEntity>? SubCategories { get; set; }
+    public List<SubCategoryEntity> SubCategories { get; set; }  = new List<SubCategoryEntity>();
 }

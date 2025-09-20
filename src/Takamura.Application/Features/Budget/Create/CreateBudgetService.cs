@@ -3,7 +3,7 @@ using Humanizer;
 using Takamura.Application.Database;
 using Takamura.Application.Database.Entities.Base.Enums;
 using Takamura.Application.Database.Entities.Budget;
-using Takamura.Application.Database.Entities.BudgetAllocation;
+using Takamura.Application.Database.Entities.SubCategoryBudget;
 
 namespace Takamura.Application.Features.Budget.Create;
 
@@ -49,28 +49,26 @@ public record CreateBudgetServiceInput(string Title, decimal Amount, BudgetAlloc
         {
             Id = 0,
             Title = Title,
-            BudgetAllocations = Allocations.Select(allocation => allocation.ToEntity(0))
-                .ToList(),
             CreatedAt = DateTime.UtcNow,
             Status = Status.Created
         };
     }
 }
 
-public record BudgetAllocationInput(int SubCategoryId, DateOnly From, DateOnly To, decimal Amount)
+public record BudgetAllocationInput(int SubCategoryId, int MonthFrom, int YearFrom, decimal Amount)
 {
-    internal BudgetAllocationEntity ToEntity(int budgetId)
+    internal SubCategoryBudgetEntity ToEntity(int budgetId)
     {
-        return new BudgetAllocationEntity
+        return new SubCategoryBudgetEntity
         {
             Id = 0,
             Amount = Amount,
-            From = From,
-            To = To,
+            MonthFrom = MonthFrom,
+            YearFrom = YearFrom,
             SubCategoryId = SubCategoryId,
-            BudgetId = budgetId,
             CreatedAt = DateTime.UtcNow,
-            Status = Status.Created
+            Status = Status.Created,
+            MonthlyBudgetId = 0
         };
     }
 }
