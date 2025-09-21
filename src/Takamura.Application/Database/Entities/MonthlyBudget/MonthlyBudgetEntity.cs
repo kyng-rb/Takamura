@@ -9,10 +9,10 @@ namespace Takamura.Application.Database.Entities.MonthlyBudget;
 public class MonthlyBudgetEntity : EntityBase
 {
     public required decimal Amount { get; set; }
-    
+
     public required int BudgetId { get; set; }
-    
+
     public BudgetEntity Budget { get; set; } = null!;
-    
-    public IEnumerable<SubCategoryBudgetEntity>  SubCategoryBudgets { get; set; } = new List<SubCategoryBudgetEntity>();
+
+    public IEnumerable<SubCategoryBudgetEntity> SubCategoryBudgets { get; set; } = [];
 }

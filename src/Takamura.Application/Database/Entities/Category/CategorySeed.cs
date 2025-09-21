@@ -7,7 +7,7 @@ namespace Takamura.Application.Database.Entities.Category;
 public class CategorySeed : IEntityTypeConfiguration<CategoryEntity>
 {
     private readonly CategoryEntity[] _categories;
-    
+
     public CategorySeed()
     {
         var utcNow = new DateTime(2025, 09, 20);

@@ -9,19 +9,18 @@ namespace Takamura.Application.Database.Entities.SubCategoryBudget;
 public class SubCategoryBudgetEntity : EntityBase
 {
     public required decimal Amount { get; set; }
-    
+
     public required int MonthFrom { get; set; }
-    
+
     public required int YearFrom { get; set; }
-    
+
     public required int SubCategoryId { get; set; }
-    
-    
+
     public SubCategoryEntity? SubCategory { get; set; }
-    
-    
+
+
     public required int MonthlyBudgetId { get; set; }
-    
-    
+
+
     public MonthlyBudgetEntity? MonthlyBudget { get; set; }
 }

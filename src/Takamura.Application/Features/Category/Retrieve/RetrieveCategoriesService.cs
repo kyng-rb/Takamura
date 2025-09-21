@@ -7,7 +7,7 @@ namespace Takamura.Application.Features.Category.Retrieve;
 
 public class RetrieveCategoriesService(DatabaseContext context)
 {
-    private readonly DatabaseContext  _context = context;
+    private readonly DatabaseContext _context = context;
 
     public async Task<Result<IEnumerable<Category>>> Handle()
     {
@@ -17,7 +17,7 @@ public class RetrieveCategoriesService(DatabaseContext context)
             .AsNoTracking()
             .ToListAsync()
             .ConfigureAwait(false);
-        
+
         var categories = records.Select(Category.FromEntity);
 
         return Result.Ok(categories);

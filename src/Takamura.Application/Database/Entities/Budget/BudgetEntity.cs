@@ -10,5 +10,5 @@ public class BudgetEntity : EntityBase
 {
     public required string Title { get; set; }
 
-    public List<MonthlyBudgetEntity> MonthlyBudgets { get; set; } = new List<MonthlyBudgetEntity>();
+    public List<MonthlyBudgetEntity> MonthlyBudgets { get; set; } = [];
 }

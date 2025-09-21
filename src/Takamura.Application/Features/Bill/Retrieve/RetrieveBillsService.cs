@@ -13,37 +13,37 @@ public class RetrieveBillsService(DatabaseContext context)
     {
         if (options.BudgetId <= 0)
             return Result.Fail("Budget Id is required");
-        
+
         if (options.From is not null && options.To is not null && options.From < options.To)
             return Result.Fail("From must be greater than To");
-        
+
         if (!_context.Budgets.Any(budget => budget.Id == options.BudgetId))
             return Result.Fail("Budget does not exist");
-        
+
         if (options.CategoryId is not null && !_context.Categories.Any(category => category.Id == options.CategoryId))
             return Result.Fail("Category does not exist");
-        
+
         if (options.SubCategoryId is not null && !_context.SubCategories.Any(subcategory => subcategory.Id == options.SubCategoryId))
             return Result.Fail("SubCategory does not exist");
 
         var query = _context.Bills.Where(bill => bill.MonthlyBudget.BudgetId == options.BudgetId);
-        
+
         if (options.From is not null)
             query = query.Where(bill => bill.Date >= options.From);
-        
+
         if (options.To is not null)
             query = query.Where(bill => bill.Date <= options.To);
-        
+
         if (options.SubCategoryId is not null)
             query = query.Where(bill => bill.SubCategoryId == options.SubCategoryId);
-        
+
         if (options.CategoryId is not null)
             query = query.Where(bill => bill.SubCategory!.CategoryId == options.CategoryId);
-        
+
         query = query.Include(s => s.SubCategory!.Category)
             .Include(x => x.SubCategory)
             .OrderBy(w => w.Date);
-        
+
         var bills = await query.ToListAsync().ConfigureAwait(false);
 
         var outputBills = bills.Select(RetrieveSingleBillOutput.FromEntity);

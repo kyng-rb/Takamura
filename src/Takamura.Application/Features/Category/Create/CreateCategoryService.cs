@@ -15,7 +15,7 @@ public class CreateCategoryService(DatabaseContext context)
             return Result.Fail("Entry description cannot be empty.");
 
         var category = input.ToEntity();
-        
+
         _context.Categories.Add(category);
         _ = await _context.SaveChangesAsync().ConfigureAwait(false);
         return Result.Ok(category.Id);
@@ -24,7 +24,7 @@ public class CreateCategoryService(DatabaseContext context)
 
 public record CreateCategoryServiceInput(string Description)
 {
-    public CategoryEntity ToEntity() 
+    public CategoryEntity ToEntity()
         => new()
         {
             Id = 0,

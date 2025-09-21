@@ -12,11 +12,11 @@ public class BillEntity : EntityBase
     public required DateOnly Date { get; set; }
     public required decimal Amount { get; set; }
     public required string Description { get; set; }
-    
+
     public required int SubCategoryId { get; set; }
     public SubCategoryEntity? SubCategory { get; set; }
-    
+
     public required int MonthlyBudgetId { get; set; }
-    
-    public MonthlyBudgetEntity? MonthlyBudget { get; set; }
+
+    public MonthlyBudgetEntity MonthlyBudget { get; set; } = null!;
 }
