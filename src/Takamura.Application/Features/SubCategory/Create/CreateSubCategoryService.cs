@@ -3,7 +3,6 @@ using Humanizer;
 using Takamura.Application.Database;
 using Takamura.Application.Database.Entities.Base.Enums;
 using Takamura.Application.Database.Entities.SubCategory;
-using Type = Takamura.Application.Database.Entities.SubCategory.Type;
 
 namespace Takamura.Application.Features.SubCategory.Create;
 
@@ -41,7 +40,6 @@ public record CreateSubCategoryServiceInput(int CategoryId, string Description, 
             CategoryId = CategoryId,
             CreatedAt = DateTime.UtcNow,
             Status = Status.Created,
-            MovementType = MovementType.DehumanizeTo<Type>()
         };
     }
 }

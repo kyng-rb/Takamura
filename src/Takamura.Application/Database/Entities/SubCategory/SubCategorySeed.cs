@@ -18,7 +18,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Comida",
                 CategoryId = 1,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -27,7 +26,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Hipoteca mensual",
                 CategoryId = 2,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -36,7 +34,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Electricidad",
                 CategoryId = 3,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -45,7 +42,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Mantenimiento",
                 CategoryId = 3,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -54,7 +50,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Limpieza",
                 CategoryId = 3,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -63,7 +58,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Animalijos",
                 CategoryId = 4,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -72,7 +66,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Gasolina",
                 CategoryId = 8,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -81,7 +74,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Lavado",
                 CategoryId = 8,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -90,7 +82,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Reynaldo",
                 CategoryId = 5,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -99,7 +90,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Jenifer",
                 CategoryId = 5,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -108,7 +98,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Internet residencial",
                 CategoryId = 3,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
             new ()
@@ -117,7 +106,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Ahorro principal",
                 CategoryId = 6,
-                MovementType = Type.Reserve,
                 Status = Status.Created
             },
             new ()
@@ -126,7 +114,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Ayuda a los viejos",
                 CategoryId = 6,
-                MovementType = Type.Reserve,
                 Status = Status.Created
             },
             new ()
@@ -135,7 +122,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Hipoteca adelantada",
                 CategoryId = 2,
-                MovementType = Type.Reserve,
                 Status = Status.Created
             },
             new ()
@@ -144,7 +130,6 @@ public class SubCategorySeed : IEntityTypeConfiguration<SubCategoryEntity>
                 CreatedAt = utcNow,
                 Description = "Inesperado",
                 CategoryId = 7,
-                MovementType = Type.Expense,
                 Status = Status.Created
             },
         ];

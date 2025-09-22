@@ -26,7 +26,7 @@ public class RetrieveBillsService(DatabaseContext context)
         if (options.SubCategoryId is not null && !_context.SubCategories.Any(subcategory => subcategory.Id == options.SubCategoryId))
             return Result.Fail("SubCategory does not exist");
 
-        var query = _context.Bills.Where(bill => bill.MonthlyBudget.BudgetId == options.BudgetId);
+        var query = _context.Bills.Where(bill => bill.BudgetId == options.BudgetId);
 
         if (options.From is not null)
             query = query.Where(bill => bill.Date >= options.From);
@@ -61,7 +61,7 @@ public record RetrieveSingleBillOutput(
     string Category,
     string Subcategory)
 {
-    internal static RetrieveSingleBillOutput FromEntity(BillEntity billEntity)
+    public static RetrieveSingleBillOutput FromEntity(BillEntity billEntity)
     {
         return new RetrieveSingleBillOutput(
             billEntity.Id,

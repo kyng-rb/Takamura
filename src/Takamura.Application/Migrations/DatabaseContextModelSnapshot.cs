@@ -8,7 +8,7 @@ using Takamura.Application.Database;
 
 #nullable disable
 
-namespace Takamura.Application.Database.Migrations
+namespace Takamura.Application.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
@@ -33,6 +33,9 @@ namespace Takamura.Application.Database.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("BudgetId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
@@ -46,9 +49,6 @@ namespace Takamura.Application.Database.Migrations
                     b.Property<DateTime?>("LastUpdateAt")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("MonthlyBudgetId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(20)");
@@ -58,7 +58,7 @@ namespace Takamura.Application.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MonthlyBudgetId");
+                    b.HasIndex("BudgetId");
 
                     b.HasIndex("SubCategoryId");
 
@@ -177,7 +177,7 @@ namespace Takamura.Application.Database.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.MonthlyBudget.MonthlyBudgetEntity", b =>
+            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodBudgetEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -197,15 +197,30 @@ namespace Takamura.Application.Database.Migrations
                     b.Property<DateTime?>("LastUpdateAt")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("MonthFrom")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(20)");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int>("YearFrom")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BudgetId");
 
-                    b.ToTable("MonthlyBudget");
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("PeriodBudget");
                 });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.SubCategory.SubCategoryEntity", b =>
@@ -229,10 +244,6 @@ namespace Takamura.Application.Database.Migrations
                     b.Property<DateTime?>("LastUpdateAt")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("MovementType")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(20)");
@@ -250,7 +261,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 1,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Comida",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -259,7 +269,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 2,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Hipoteca mensual",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -268,7 +277,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 3,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Electricidad",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -277,7 +285,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 3,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Mantenimiento",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -286,7 +293,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 3,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Limpieza",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -295,7 +301,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 4,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Animalijos",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -304,7 +309,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 8,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Gasolina",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -313,7 +317,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 8,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Lavado",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -322,7 +325,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 5,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Reynaldo",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -331,7 +333,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 5,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Jenifer",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -340,7 +341,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 3,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Internet residencial",
-                            MovementType = "Expense",
                             Status = "Created"
                         },
                         new
@@ -349,7 +349,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 6,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Ahorro principal",
-                            MovementType = "Reserve",
                             Status = "Created"
                         },
                         new
@@ -358,7 +357,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 6,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Ayuda a los viejos",
-                            MovementType = "Reserve",
                             Status = "Created"
                         },
                         new
@@ -367,7 +365,6 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 2,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Hipoteca adelantada",
-                            MovementType = "Reserve",
                             Status = "Created"
                         },
                         new
@@ -376,58 +373,15 @@ namespace Takamura.Application.Database.Migrations
                             CategoryId = 7,
                             CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Inesperado",
-                            MovementType = "Expense",
                             Status = "Created"
                         });
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.SubCategoryBudget.SubCategoryBudgetEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("LastUpdateAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("MonthFrom")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MonthlyBudgetId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<int>("SubCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("YearFrom")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MonthlyBudgetId");
-
-                    b.HasIndex("SubCategoryId");
-
-                    b.ToTable("SubCategoryBudget");
-                });
-
             modelBuilder.Entity("Takamura.Application.Database.Entities.Bill.BillEntity", b =>
                 {
-                    b.HasOne("Takamura.Application.Database.Entities.MonthlyBudget.MonthlyBudgetEntity", "MonthlyBudget")
+                    b.HasOne("Takamura.Application.Database.Entities.Budget.BudgetEntity", "Budget")
                         .WithMany()
-                        .HasForeignKey("MonthlyBudgetId")
+                        .HasForeignKey("BudgetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -437,20 +391,28 @@ namespace Takamura.Application.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MonthlyBudget");
+                    b.Navigation("Budget");
 
                     b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.MonthlyBudget.MonthlyBudgetEntity", b =>
+            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodBudgetEntity", b =>
                 {
                     b.HasOne("Takamura.Application.Database.Entities.Budget.BudgetEntity", "Budget")
-                        .WithMany("MonthlyBudgets")
+                        .WithMany("PeriodBudgets")
                         .HasForeignKey("BudgetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Takamura.Application.Database.Entities.SubCategory.SubCategoryEntity", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Budget");
+
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.SubCategory.SubCategoryEntity", b =>
@@ -464,38 +426,14 @@ namespace Takamura.Application.Database.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.SubCategoryBudget.SubCategoryBudgetEntity", b =>
-                {
-                    b.HasOne("Takamura.Application.Database.Entities.MonthlyBudget.MonthlyBudgetEntity", "MonthlyBudget")
-                        .WithMany("SubCategoryBudgets")
-                        .HasForeignKey("MonthlyBudgetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Takamura.Application.Database.Entities.SubCategory.SubCategoryEntity", "SubCategory")
-                        .WithMany()
-                        .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MonthlyBudget");
-
-                    b.Navigation("SubCategory");
-                });
-
             modelBuilder.Entity("Takamura.Application.Database.Entities.Budget.BudgetEntity", b =>
                 {
-                    b.Navigation("MonthlyBudgets");
+                    b.Navigation("PeriodBudgets");
                 });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.Category.CategoryEntity", b =>
                 {
                     b.Navigation("SubCategories");
-                });
-
-            modelBuilder.Entity("Takamura.Application.Database.Entities.MonthlyBudget.MonthlyBudgetEntity", b =>
-                {
-                    b.Navigation("SubCategoryBudgets");
                 });
 #pragma warning restore 612, 618
         }
