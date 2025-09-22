@@ -1,3 +1,4 @@
+using Takamura.API.Extensions;
 using Takamura.Application;
 using Takamura.Application.Features.Category.Retrieve;
 
@@ -13,6 +14,6 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.MapGet("/", () => "App is running");
 
-app.MapGet("api/category", async (RetrieveCategoriesService service) => await service.Handle());
+app.MapGet("api/category", async (RetrieveCategoriesService service) => await service.Handle().ToHttp());
 
 app.Run();
