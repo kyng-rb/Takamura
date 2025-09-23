@@ -1,6 +1,5 @@
-using Takamura.API.Extensions;
+using Takamura.API;
 using Takamura.Application;
-using Takamura.Application.Features.Category.Retrieve;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +9,9 @@ builder.Services.AddDatabaseContext(databaseConnectionString!);
 builder.Services.AddServices();
 
 var app = builder.Build();
-
 app.UseHttpsRedirection();
-app.MapGet("/", () => "App is running");
 
-app.MapGet("api/category", async (RetrieveCategoriesService service) => await service.Handle().ToHttp());
+var endpoints = new Endpoints();
+endpoints.Map(app);
 
 app.Run();

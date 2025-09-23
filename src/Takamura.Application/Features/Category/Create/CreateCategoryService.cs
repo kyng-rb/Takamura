@@ -1,6 +1,5 @@
 using FluentResults;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Entities.Base.Enums;
 using Takamura.Application.Database.Entities.Category;
 
 namespace Takamura.Application.Features.Category.Create;
@@ -22,14 +21,19 @@ public class CreateCategoryService(DatabaseContext context)
     }
 }
 
-public record CreateCategoryServiceInput(string Description)
+public record CreateSubCategoryInput(string Description);
+
+public record CreateCategoryServiceInput(string Description, IEnumerable<CreateCategoryServiceInput> SubCategories)
 {
     public CategoryEntity ToEntity()
-        => new()
+    {
+        var category = CategoryEntity.Create(Description);
+
+        if (SubCategories?.Count() > 0)
         {
-            Id = 0,
-            Description = Description,
-            CreatedAt = DateTime.UtcNow,
-            Status = Status.Created
-        };
+            category.AttachSubCategories(SubCategories.Select(x => x.Description));
+        }
+
+        return category;
+    }
 }

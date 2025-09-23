@@ -12,4 +12,16 @@ public class SubCategoryEntity : EntityBase
     public required int CategoryId { get; set; }
 
     public CategoryEntity Category { get; set; } = null!;
+
+    internal static SubCategoryEntity Create(int categoryId, string description)
+    {
+        return new()
+        {
+            Id = 0,
+            CategoryId = categoryId,
+            Description = description,
+            CreatedAt = DateTime.UtcNow,
+            Status = Base.Enums.Status.Created
+        };
+    }
 }

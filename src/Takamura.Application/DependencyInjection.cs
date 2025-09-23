@@ -6,7 +6,6 @@ using Takamura.Application.Features.Bill.Retrieve;
 using Takamura.Application.Features.Budget.Create;
 using Takamura.Application.Features.Category.Create;
 using Takamura.Application.Features.Category.Retrieve;
-using Takamura.Application.Features.SubCategory.Create;
 
 namespace Takamura.Application;
 
@@ -16,7 +15,6 @@ public static class DependencyInjection
     {
         services.AddScoped<CreateCategoryService>();
         services.AddScoped<RetrieveCategoriesService>();
-        services.AddScoped<CreateSubCategoryService>();
 
         services.AddScoped<CreateBillService>();
         services.AddScoped<RetrieveBillsService>();
