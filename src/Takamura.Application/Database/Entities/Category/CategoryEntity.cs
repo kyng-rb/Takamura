@@ -33,9 +33,15 @@ public class CategoryEntity : EntityBase
         Status = Base.Enums.Status.Deleted;
     }
 
+    public void AttachSubCategory(string description)
+    {
+        var subCategory = SubCategoryEntity.Create(Id, description);
+        SubCategories.Add(subCategory);
+    }
+
     public void AttachSubCategories(IEnumerable<string> descriptions)
     {
-        foreach (var description in descriptions.Where(x => !string.IsNullOrWhiteSpace(x)))
+        foreach (var description in descriptions)
         {
             var subCategory = SubCategoryEntity.Create(Id, description);
             SubCategories.Add(subCategory);

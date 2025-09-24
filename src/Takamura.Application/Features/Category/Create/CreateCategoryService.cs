@@ -13,6 +13,9 @@ public class CreateCategoryService(DatabaseContext context)
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Entry description cannot be empty.");
 
+        if (input.SubCategories.Any(x => string.IsNullOrWhiteSpace(x.Description)))
+            return Result.Fail("SubCategory description cannot be empty.");
+
         var category = input.ToEntity();
 
         _context.Categories.Add(category);

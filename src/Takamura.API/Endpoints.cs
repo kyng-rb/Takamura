@@ -1,4 +1,5 @@
 using Takamura.API.Extensions;
+using Takamura.Application.Features.Category.AttachSubCategory;
 using Takamura.Application.Features.Category.Create;
 using Takamura.Application.Features.Category.Retrieve;
 
@@ -17,5 +18,13 @@ public class Endpoints
 
         app.MapPost($"{Base}/category", async (CreateCategoryService service, CreateCategoryServiceInput input)
             => await service.Handle(input).ToHttp());
+
+        app.MapPost($"{Base}/category/{{id}}", async (AttachSubCategoryService service, int id, AttachSubCategoryRequest input)
+            => await service.Handle(input.ToServiceInput(id)).ToHttp());
     }
+
+    public record AttachSubCategoryRequest(string Description)
+    {
+        public AttachSubCategoryServiceInput ToServiceInput(int categoryId) => new(categoryId, Description);
+    };
 }
