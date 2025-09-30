@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Takamura.Application.Database;
 using Takamura.Application.Features.Bill.Create;
 using Takamura.Application.Features.Bill.Retrieve;
+using Takamura.Application.Features.Budget.AttachPeriod;
 using Takamura.Application.Features.Budget.Create;
+using Takamura.Application.Features.Budget.Retrieve;
 using Takamura.Application.Features.Category.AttachSubCategory;
 using Takamura.Application.Features.Category.Create;
 using Takamura.Application.Features.Category.Retrieve;
@@ -18,9 +20,12 @@ public static class DependencyInjection
         services.AddScoped<RetrieveCategoriesService>();
         services.AddScoped<AttachSubCategoryService>();
 
+        services.AddScoped<CreateBudgetService>();
+        services.AddScoped<RetrieveBudgetsService>();
+        services.AddScoped<AttachPeriodAllocationService>();
+
         services.AddScoped<CreateBillService>();
         services.AddScoped<RetrieveBillsService>();
-        services.AddScoped<CreateBudgetService>();
         return services;
     }
 

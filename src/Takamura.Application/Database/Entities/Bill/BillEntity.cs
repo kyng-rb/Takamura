@@ -16,9 +16,29 @@ public class BillEntity : EntityBase
 
     public required int SubCategoryId { get; set; }
 
-    public SubCategoryEntity? SubCategory { get; set; }
+    public SubCategoryEntity SubCategory { get; set; } = null!;
 
     public required int BudgetId { get; set; }
 
     public BudgetEntity Budget { get; set; } = null!;
+
+    public static BillEntity Create(
+        DateOnly date,
+        decimal amount,
+        string description,
+        int subCategoryId,
+        int budgetId)
+    {
+        return new BillEntity
+        {
+            Id = 0,
+            BudgetId = budgetId,
+            Date = date,
+            Amount = amount,
+            Description = description,
+            SubCategoryId = subCategoryId,
+            CreatedAt = DateTime.UtcNow,
+            Status = Base.Enums.Status.Created
+        };
+    }
 }

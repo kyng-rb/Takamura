@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Humanizer;
 using Takamura.Application.Database.Entities.Base;
 using Takamura.Application.Database.Entities.Budget;
 using Takamura.Application.Database.Entities.SubCategory;
@@ -23,4 +24,25 @@ public class PeriodBudgetEntity : EntityBase
     public required int BudgetId { get; set; }
 
     public BudgetEntity Budget { get; set; } = null!;
+
+    public static PeriodBudgetEntity Create(int budgetId,
+                                            int subCategoryId,
+                                            int month,
+                                            int year,
+                                            decimal amount,
+                                            string type)
+    {
+        return new PeriodBudgetEntity
+        {
+            Id = 0,
+            BudgetId = budgetId,
+            SubCategoryId = subCategoryId,
+            MonthFrom = month,
+            YearFrom = year,
+            Amount = amount,
+            Type = type.DehumanizeTo<BudgetType>(),
+            CreatedAt = DateTime.UtcNow,
+            Status = Base.Enums.Status.Created
+        };
+    }
 }

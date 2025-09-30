@@ -26,7 +26,15 @@ public class RetrieveBillsService(DatabaseContext context)
         if (options.SubCategoryId is not null && !_context.SubCategories.Any(subcategory => subcategory.Id == options.SubCategoryId))
             return Result.Fail("SubCategory does not exist");
 
-        var query = _context.Bills.Where(bill => bill.BudgetId == options.BudgetId);
+        var bills = await GetRecords(options).ConfigureAwait(false);
+
+        return Result.Ok(RetrieveBillsOutput.FromEntities(bills));
+    }
+
+    private async Task<List<BillEntity>> GetRecords(RetrieveBillsOptions options)
+    {
+        var query = _context.Bills
+                    .Where(bill => bill.BudgetId == options.BudgetId);
 
         if (options.From is not null)
             query = query.Where(bill => bill.Date >= options.From);
@@ -40,20 +48,24 @@ public class RetrieveBillsService(DatabaseContext context)
         if (options.CategoryId is not null)
             query = query.Where(bill => bill.SubCategory!.CategoryId == options.CategoryId);
 
-        query = query.Include(s => s.SubCategory!.Category)
-            .Include(x => x.SubCategory)
+        query = query.Include(s => s.SubCategory)
+            .Include(s => s.SubCategory.Category)
             .OrderBy(w => w.Date);
 
-        var bills = await query.ToListAsync().ConfigureAwait(false);
-
-        var outputBills = bills.Select(RetrieveSingleBillOutput.FromEntity);
-        return Result.Ok(new RetrieveBillsOutput(outputBills));
+        return await query
+            .AsNoTracking()
+            .ToListAsync();
     }
 }
 
-public record RetrieveBillsOptions(int BudgetId, DateOnly? From, DateOnly? To, int? CategoryId, int? SubCategoryId);
+public record RetrieveBillsOptions(
+    int BudgetId,
+    DateOnly? From,
+    DateOnly? To,
+    int? CategoryId,
+    int? SubCategoryId);
 
-public record RetrieveSingleBillOutput(
+public record BillOutput(
     int Id,
     string Description,
     decimal Amount,
@@ -61,9 +73,9 @@ public record RetrieveSingleBillOutput(
     string Category,
     string Subcategory)
 {
-    public static RetrieveSingleBillOutput FromEntity(BillEntity billEntity)
+    public static BillOutput FromEntity(BillEntity billEntity)
     {
-        return new RetrieveSingleBillOutput(
+        return new BillOutput(
             billEntity.Id,
             billEntity.Description,
             billEntity.Amount,
@@ -73,4 +85,11 @@ public record RetrieveSingleBillOutput(
     }
 }
 
-public record RetrieveBillsOutput(IEnumerable<RetrieveSingleBillOutput> Bills);
+public record RetrieveBillsOutput(IEnumerable<BillOutput> Bills)
+{
+    public static RetrieveBillsOutput FromEntities(IEnumerable<BillEntity> bills)
+    {
+        var billOutputs = bills.Select(BillOutput.FromEntity);
+        return new RetrieveBillsOutput(billOutputs);
+    }
+}

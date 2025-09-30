@@ -1,7 +1,6 @@
 using FluentResults;
 using Humanizer;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Entities.Base.Enums;
 using Takamura.Application.Database.Entities.Budget;
 using Takamura.Application.Database.Entities.PeriodBudget;
 
@@ -16,22 +15,9 @@ public class CreateBudgetService(DatabaseContext context)
         if (string.IsNullOrWhiteSpace(input.Title))
             return Result.Fail<int>("Title is required");
 
-        if (input.Amount <= 0)
-            return Result.Fail<int>("Amount must be greater than 0");
-
-        for (var i = 0; i < input.Allocations.Length; i++)
-        {
-            var allocation = input.Allocations[i];
-
-            if (allocation.Amount <= 0)
-                return Result.Fail<int>($"Allocation amount must be greater than 0 on the {i.Ordinalize()} allocation");
-
-            if (allocation.SubCategoryId <= 0)
-                return Result.Fail<int>($"SubCategory id is required on the {i.Ordinalize()} allocation");
-
-            if (!_context.SubCategories.Any(s => s.Id == allocation.SubCategoryId))
-                return Result.Fail<int>($"SubCategory does not exist on the {i.Ordinalize()} allocation");
-        }
+        var validationResult = ValidateBudgetPeriods(input);
+        if (validationResult.IsFailed)
+            return Result.Fail<int>(validationResult.Errors);
 
         var entity = input.ToEntity();
         _context.Add(entity);
@@ -39,38 +25,54 @@ public class CreateBudgetService(DatabaseContext context)
 
         return Result.Ok(entity.Id);
     }
+
+    private Result ValidateBudgetPeriods(CreateBudgetServiceInput input)
+    {
+        if (input.Allocations is null || input.Allocations.Length == 0)
+            return Result.Ok();
+
+        for (var i = 0; i < input.Allocations.Length; i++)
+        {
+            var allocation = input.Allocations[i];
+
+            if (allocation.Amount <= 0)
+                return Result.Fail($"Allocation amount must be greater than 0 on the {i + 1.Ordinalize()} allocation");
+
+            if (allocation.SubCategoryId <= 0)
+                return Result.Fail($"SubCategory id is required on the {i + 1.Ordinalize()} allocation");
+
+            if (!_context.SubCategories.Any(s => s.Id == allocation.SubCategoryId))
+                return Result.Fail($"SubCategory does not exist on the {i + 1.Ordinalize()} allocation");
+        }
+
+        return Result.Ok();
+    }
 }
 
-public record CreateBudgetServiceInput(string Title, decimal Amount, BudgetAllocationInput[] Allocations)
+public record CreateBudgetServiceInput(
+    string Title,
+    CreateBudgetPeriodAllocationInput[] Allocations)
 {
     public BudgetEntity ToEntity()
     {
-        return new BudgetEntity
+        var budget = BudgetEntity.Create(Title);
+
+        if (Allocations is null || Allocations.Length == 0)
+            return budget;
+
+        foreach (var allocation in Allocations)
         {
-            Id = 0,
-            Title = Title,
-            CreatedAt = DateTime.UtcNow,
-            Status = Status.Created,
-            PeriodBudgets = [.. Allocations.Select(a => a.ToEntity())]
-        };
+            var periodBudget = PeriodBudgetEntity.Create(budget.Id, allocation.SubCategoryId, allocation.MonthFrom, allocation.YearFrom, allocation.Amount, allocation.Type);
+            budget.AddPeriodBudget(periodBudget);
+        }
+
+        return budget;
     }
 }
 
-public record BudgetAllocationInput(int SubCategoryId, int MonthFrom, int YearFrom, decimal Amount)
-{
-    public PeriodBudgetEntity ToEntity()
-    {
-        return new PeriodBudgetEntity
-        {
-            Id = 0,
-            Amount = Amount,
-            MonthFrom = MonthFrom,
-            YearFrom = YearFrom,
-            SubCategoryId = SubCategoryId,
-            CreatedAt = DateTime.UtcNow,
-            Status = Status.Created,
-            BudgetId = 0,
-            Type = BudgetType.Outcome
-        };
-    }
-}
+public record CreateBudgetPeriodAllocationInput(
+    int SubCategoryId,
+    int MonthFrom,
+    int YearFrom,
+    decimal Amount,
+    string Type);

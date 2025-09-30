@@ -10,4 +10,20 @@ public class BudgetEntity : EntityBase
     public required string Title { get; set; }
 
     public List<PeriodBudgetEntity> PeriodBudgets { get; set; } = [];
+
+    public static BudgetEntity Create(string title)
+    {
+        return new BudgetEntity
+        {
+            Id = 0,
+            Title = title,
+            CreatedAt = DateTime.UtcNow,
+            Status = Base.Enums.Status.Created
+        };
+    }
+
+    public void AddPeriodBudget(PeriodBudgetEntity periodBudget)
+    {
+        PeriodBudgets.Add(periodBudget);
+    }
 }

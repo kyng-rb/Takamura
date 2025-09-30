@@ -1,4 +1,4 @@
-using Takamura.API;
+using Takamura.API.Endpoints;
 using Takamura.Application;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +11,9 @@ builder.Services.AddServices();
 var app = builder.Build();
 app.UseHttpsRedirection();
 
-var endpoints = new Endpoints();
-endpoints.Map(app);
+app.MapGet("/", () => "Takamura API is running...");
+
+CategoryEndpoints.Map(app);
+BudgetEndpoints.Map(app);
 
 app.Run();

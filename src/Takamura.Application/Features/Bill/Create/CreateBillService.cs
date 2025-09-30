@@ -1,6 +1,5 @@
 using FluentResults;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Entities.Base.Enums;
 using Takamura.Application.Database.Entities.Bill;
 
 namespace Takamura.Application.Features.Bill.Create;
@@ -40,17 +39,5 @@ public class CreateBillService(DatabaseContext context)
 public record CreateBillServiceInput(DateOnly Date, decimal Amount, string Description, int BudgetId, int SubCategoryId)
 {
     public BillEntity ToEntity()
-    {
-        return new BillEntity
-        {
-            Id = 0,
-            Date = Date,
-            Amount = Amount,
-            Description = Description,
-            SubCategoryId = SubCategoryId,
-            CreatedAt = DateTime.UtcNow,
-            Status = Status.Created,
-            BudgetId = 0
-        };
-    }
+        => BillEntity.Create(Date, Amount, Description, SubCategoryId, BudgetId);
 }
