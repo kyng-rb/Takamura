@@ -1,0 +1,2 @@
+[**/Migrations/*.cs]
+dotnet_analyzer_diagnostic.severity = none
