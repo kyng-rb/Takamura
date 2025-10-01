@@ -12,7 +12,7 @@ using Takamura.Application.Database;
 namespace Takamura.Application.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250922161829_initial_setup")]
+    [Migration("20251001032609_initial_setup")]
     partial class initial_setup
     {
         /// <inheritdoc />
@@ -180,7 +180,7 @@ namespace Takamura.Application.Database.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodBudgetEntity", b =>
+            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodAllocationEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -223,7 +223,7 @@ namespace Takamura.Application.Database.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("PeriodBudget");
+                    b.ToTable("PeriodAllocation");
                 });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.SubCategory.SubCategoryEntity", b =>
@@ -399,7 +399,7 @@ namespace Takamura.Application.Database.Migrations
                     b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodBudgetEntity", b =>
+            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodAllocationEntity", b =>
                 {
                     b.HasOne("Takamura.Application.Database.Entities.Budget.BudgetEntity", "Budget")
                         .WithMany("PeriodBudgets")

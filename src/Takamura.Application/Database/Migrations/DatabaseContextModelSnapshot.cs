@@ -177,7 +177,7 @@ namespace Takamura.Application.Database.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodBudgetEntity", b =>
+            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodAllocationEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -220,7 +220,7 @@ namespace Takamura.Application.Database.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("PeriodBudget");
+                    b.ToTable("PeriodAllocation");
                 });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.SubCategory.SubCategoryEntity", b =>
@@ -396,7 +396,7 @@ namespace Takamura.Application.Database.Migrations
                     b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodBudgetEntity", b =>
+            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodAllocationEntity", b =>
                 {
                     b.HasOne("Takamura.Application.Database.Entities.Budget.BudgetEntity", "Budget")
                         .WithMany("PeriodBudgets")

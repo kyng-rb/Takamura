@@ -101,7 +101,7 @@ namespace Takamura.Application.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PeriodBudget",
+                name: "PeriodAllocation",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -118,15 +118,15 @@ namespace Takamura.Application.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PeriodBudget", x => x.Id);
+                    table.PrimaryKey("PK_PeriodAllocation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PeriodBudget_Budget_BudgetId",
+                        name: "FK_PeriodAllocation_Budget_BudgetId",
                         column: x => x.BudgetId,
                         principalTable: "Budget",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PeriodBudget_SubCategory_SubCategoryId",
+                        name: "FK_PeriodAllocation_SubCategory_SubCategoryId",
                         column: x => x.SubCategoryId,
                         principalTable: "SubCategory",
                         principalColumn: "Id",
@@ -181,13 +181,13 @@ namespace Takamura.Application.Database.Migrations
                 column: "SubCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PeriodBudget_BudgetId",
-                table: "PeriodBudget",
+                name: "IX_PeriodAllocation_BudgetId",
+                table: "PeriodAllocation",
                 column: "BudgetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PeriodBudget_SubCategoryId",
-                table: "PeriodBudget",
+                name: "IX_PeriodAllocation_SubCategoryId",
+                table: "PeriodAllocation",
                 column: "SubCategoryId");
 
             migrationBuilder.CreateIndex(
@@ -203,7 +203,7 @@ namespace Takamura.Application.Database.Migrations
                 name: "Bill");
 
             migrationBuilder.DropTable(
-                name: "PeriodBudget");
+                name: "PeriodAllocation");
 
             migrationBuilder.DropTable(
                 name: "Budget");
