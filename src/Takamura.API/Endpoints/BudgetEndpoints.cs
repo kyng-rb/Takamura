@@ -25,11 +25,25 @@ public static class BudgetEndpoints
         group.MapPost("/{id}/allocation", async ([FromRoute] int id, [FromBody] AttachPeriodAllocationRequest input, [FromServices] AttachPeriodAllocationService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp());
 
-        group.MapGet("/{id:int}/bill", async ([FromRoute] int id, [FromBody] RetrieveBillsRequest input, [FromServices] RetrieveBillsService service)
+        group.MapGet("/{id}/allocation", async ([FromRoute] int id, [AsParameters] RetrievePeriodAllocationRequest input, [FromServices] RetrievePeriodAllocationsService service)
+            => await service.Handle(input.ToServiceInput(id)).ToHttp());
+
+        group.MapGet("/{id:int}/bill", async ([FromRoute] int id, [AsParameters] RetrieveBillsRequest input, [FromServices] RetrieveBillsService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp());
 
         group.MapPost("/{id}/bill", async ([FromRoute] int id, [FromBody] CreateBillRequest input, [FromServices] CreateBillService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp());
+    }
+
+    public record RetrievePeriodAllocationRequest(
+        int? Year,
+        int? Month,
+        int? SubCategoryId,
+        int? CategoryId,
+        string? Type)
+    {
+        public RetrievePeriodAllocationInput ToServiceInput(int budgetId)
+            => new(budgetId, Year, Month, SubCategoryId, CategoryId, Type);
     }
 
     public record CreateBillRequest(DateOnly Date, decimal Amount, string Description, int SubCategoryId)

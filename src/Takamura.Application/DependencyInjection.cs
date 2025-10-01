@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<CreateBudgetService>();
         services.AddScoped<RetrieveBudgetsService>();
         services.AddScoped<AttachPeriodAllocationService>();
+        services.AddScoped<RetrievePeriodAllocationsService>();
 
         services.AddScoped<CreateBillService>();
         services.AddScoped<RetrieveBillsService>();

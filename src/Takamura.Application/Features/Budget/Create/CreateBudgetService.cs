@@ -62,7 +62,7 @@ public record CreateBudgetServiceInput(
 
         foreach (var allocation in Allocations)
         {
-            var periodBudget = PeriodBudgetEntity.Create(budget.Id, allocation.SubCategoryId, allocation.MonthFrom, allocation.YearFrom, allocation.Amount, allocation.Type);
+            var periodBudget = PeriodAllocationEntity.Create(budget.Id, allocation.SubCategoryId, allocation.MonthFrom, allocation.YearFrom, allocation.Amount, allocation.Type);
             budget.AddPeriodBudget(periodBudget);
         }
 

@@ -9,7 +9,7 @@ public class BudgetEntity : EntityBase
 {
     public required string Title { get; set; }
 
-    public List<PeriodBudgetEntity> PeriodBudgets { get; set; } = [];
+    public List<PeriodAllocationEntity> PeriodBudgets { get; set; } = [];
 
     public static BudgetEntity Create(string title)
     {
@@ -22,7 +22,7 @@ public class BudgetEntity : EntityBase
         };
     }
 
-    public void AddPeriodBudget(PeriodBudgetEntity periodBudget)
+    public void AddPeriodBudget(PeriodAllocationEntity periodBudget)
     {
         PeriodBudgets.Add(periodBudget);
     }

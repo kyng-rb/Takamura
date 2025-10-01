@@ -42,7 +42,7 @@ public record AttachPeriodAllocationServiceInput(
     decimal Amount,
     string Type)
 {
-    public PeriodBudgetEntity ToEntity()
-     => PeriodBudgetEntity.Create(BudgetId, SubCategoryId, Month, Year, Amount, Type);
+    public PeriodAllocationEntity ToEntity()
+     => PeriodAllocationEntity.Create(BudgetId, SubCategoryId, Month, Year, Amount, Type);
 
 }
