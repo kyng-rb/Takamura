@@ -49,7 +49,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
 
     public DbSet<BudgetEntity> Budgets => Set<BudgetEntity>();
 
-    public DbSet<PeriodAllocationEntity> PeriodBudgets => Set<PeriodAllocationEntity>();
+    public DbSet<PeriodAllocationEntity> PeriodAllocations => Set<PeriodAllocationEntity>();
 
     public DbSet<BillEntity> Bills => Set<BillEntity>();
 }

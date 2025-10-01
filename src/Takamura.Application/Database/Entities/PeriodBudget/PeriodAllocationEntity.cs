@@ -6,7 +6,7 @@ using Takamura.Application.Database.Entities.SubCategory;
 
 namespace Takamura.Application.Database.Entities.PeriodBudget;
 
-[Table("PeriodBudget")]
+[Table("PeriodAllocation")]
 public class PeriodAllocationEntity : EntityBase
 {
     public required decimal Amount { get; set; }

@@ -27,7 +27,7 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
 
     private async Task<List<PeriodAllocationEntity>> GetRecords(RetrievePeriodAllocationInput input)
     {
-        var allocations = _context.PeriodBudgets
+        var allocations = _context.PeriodAllocations
                     .Where(x => x.BudgetId == input.BudgetId);
 
         if (input.Year.HasValue)
