@@ -9,5 +9,9 @@
     <ItemGroup>
       <ProjectReference Include="..\Takamura.Application\Takamura.Application.csproj" />
     </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Scalar.AspNetCore" Version="2.8.10" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    </ItemGroup>
 
 </Project>
