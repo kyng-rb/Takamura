@@ -19,7 +19,7 @@ public static class CategoryEndpoints
         group.MapPost("/", async (CreateCategoryService service, CreateCategoryServiceInput input)
             => await service.Handle(input).ToHttp());
 
-        group.MapPost($"{Section}/{{id}}", async (AttachSubCategoryService service, int id, AttachSubCategoryRequest input)
+        group.MapPost($"/{{id}}", async (AttachSubCategoryService service, int id, AttachSubCategoryRequest input)
             => await service.Handle(input.ToServiceInput(id)).ToHttp());
     }
 }

@@ -3,8 +3,9 @@ using Microsoft.Extensions.Logging;
 using Takamura.Application.Database.Entities.Bill;
 using Takamura.Application.Database.Entities.Budget;
 using Takamura.Application.Database.Entities.Category;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 using Takamura.Application.Database.Entities.SubCategory;
+using Takamura.Application.Database.Entities.Summary;
 
 namespace Takamura.Application.Database;
 
@@ -13,6 +14,14 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
+
+        modelBuilder
+        .HasDbFunction(typeof(DatabaseContext).GetMethod(nameof(GetMonthlyCategoryBalance), new[] { typeof(int), typeof(int), typeof(int?) }))
+        .HasName("monthly_category_balance");
+
+        modelBuilder
+        .HasDbFunction(typeof(DatabaseContext).GetMethod(nameof(MonthlySubCategoryBalance), new[] { typeof(int), typeof(int), typeof(int?) }))
+        .HasName("monthly_sub_category_balance");
 
         base.OnModelCreating(modelBuilder);
     }
@@ -52,4 +61,10 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<PeriodAllocationEntity> PeriodAllocations => Set<PeriodAllocationEntity>();
 
     public DbSet<BillEntity> Bills => Set<BillEntity>();
+
+    public IQueryable<MonthlyCategoryBalance> GetMonthlyCategoryBalance(int budgetId, int year, int? month)
+        => FromExpression(() => GetMonthlyCategoryBalance(budgetId, year, month));
+
+    public IQueryable<MonthlySubCategoryBalance> MonthlySubCategoryBalance(int budgetId, int year, int? month)
+        => FromExpression(() => MonthlySubCategoryBalance(budgetId, year, month));
 }

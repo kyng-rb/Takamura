@@ -1,6 +1,6 @@
 using FluentResults;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 
 namespace Takamura.Application.Features.Budget.AttachPeriod;
 
@@ -39,10 +39,11 @@ public record AttachPeriodAllocationServiceInput(
     int SubCategoryId,
     int Month,
     int Year,
+    string Description,
     decimal Amount,
     string Type)
 {
     public PeriodAllocationEntity ToEntity()
-     => PeriodAllocationEntity.Create(BudgetId, SubCategoryId, Month, Year, Amount, Type);
+     => PeriodAllocationEntity.Create(BudgetId, SubCategoryId, Month, Year, Description, Amount, Type);
 
 }

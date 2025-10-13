@@ -2,7 +2,7 @@ using FluentResults;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 
 namespace Takamura.Application.Features.Budget.Retrieve;
 
@@ -43,7 +43,7 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
             allocations = allocations.Where(x => x.SubCategory!.CategoryId == input.CategoryId.Value);
 
         if (!string.IsNullOrWhiteSpace(input.Type))
-            allocations = allocations.Where(x => x.Type == input.Type.DehumanizeTo<BudgetType>());
+            allocations = allocations.Where(x => x.Type == input.Type.DehumanizeTo<AllocationType>());
 
         return await allocations
             .Include(s => s.SubCategory)
@@ -64,6 +64,7 @@ public record RetrievePeriodAllocationsOutput(IEnumerable<PeriodAllocationOutput
             x.MonthFrom,
             x.YearFrom,
             x.Type.Humanize(),
+            x.Description,
             x.SubCategoryId,
             x.SubCategory!.Description,
             x.SubCategory!.CategoryId,
@@ -80,6 +81,7 @@ public record PeriodAllocationOutput(
     int Month,
     int Year,
     string Type,
+    string Description,
     int SubCategoryId,
     string SubCategory,
     int CategoryId,

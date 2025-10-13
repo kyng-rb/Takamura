@@ -26,7 +26,7 @@ public class CreateCategoryService(DatabaseContext context)
 
 public record CreateSubCategoryInput(string Description);
 
-public record CreateCategoryServiceInput(string Description, IEnumerable<CreateCategoryServiceInput> SubCategories)
+public record CreateCategoryServiceInput(string Description, IEnumerable<CreateSubCategoryInput> SubCategories)
 {
     public CategoryEntity ToEntity()
     {

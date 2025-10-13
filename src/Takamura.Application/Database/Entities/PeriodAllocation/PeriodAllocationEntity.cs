@@ -4,7 +4,7 @@ using Takamura.Application.Database.Entities.Base;
 using Takamura.Application.Database.Entities.Budget;
 using Takamura.Application.Database.Entities.SubCategory;
 
-namespace Takamura.Application.Database.Entities.PeriodBudget;
+namespace Takamura.Application.Database.Entities.PeriodAllocation;
 
 [Table("PeriodAllocation")]
 public class PeriodAllocationEntity : EntityBase
@@ -15,7 +15,9 @@ public class PeriodAllocationEntity : EntityBase
 
     public required int YearFrom { get; set; }
 
-    public required BudgetType Type { get; set; }
+    public required AllocationType Type { get; set; }
+
+    public required string Description { get; set; }
 
     public required int SubCategoryId { get; set; }
 
@@ -29,6 +31,7 @@ public class PeriodAllocationEntity : EntityBase
                                             int subCategoryId,
                                             int month,
                                             int year,
+                                            string description,
                                             decimal amount,
                                             string type)
     {
@@ -39,8 +42,9 @@ public class PeriodAllocationEntity : EntityBase
             SubCategoryId = subCategoryId,
             MonthFrom = month,
             YearFrom = year,
+            Description = description,
             Amount = amount,
-            Type = type.DehumanizeTo<BudgetType>(),
+            Type = type.DehumanizeTo<AllocationType>(),
             CreatedAt = DateTime.UtcNow,
             Status = Base.Enums.Status.Created
         };
