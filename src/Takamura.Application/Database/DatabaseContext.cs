@@ -6,6 +6,7 @@ using Takamura.Application.Database.Entities.Category;
 using Takamura.Application.Database.Entities.PeriodAllocation;
 using Takamura.Application.Database.Entities.SubCategory;
 using Takamura.Application.Database.Entities.Summary;
+using Takamura.Application.Features.Budget.Summary;
 
 namespace Takamura.Application.Database;
 
@@ -20,8 +21,12 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
         .HasName("monthly_category_balance");
 
         modelBuilder
-        .HasDbFunction(typeof(DatabaseContext).GetMethod(nameof(MonthlySubCategoryBalance), new[] { typeof(int), typeof(int), typeof(int?) }))
+        .HasDbFunction(typeof(DatabaseContext).GetMethod(nameof(GetMonthlySubCategoryBalance), new[] { typeof(int), typeof(int), typeof(int?) }))
         .HasName("monthly_sub_category_balance");
+
+        modelBuilder
+        .HasDbFunction(typeof(DatabaseContext).GetMethod(nameof(GetYearToDateBalance), new[] { typeof(int) }))
+        .HasName("year_to_date_balance");
 
         base.OnModelCreating(modelBuilder);
     }
@@ -65,6 +70,9 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public IQueryable<MonthlyCategoryBalance> GetMonthlyCategoryBalance(int budgetId, int year, int? month)
         => FromExpression(() => GetMonthlyCategoryBalance(budgetId, year, month));
 
-    public IQueryable<MonthlySubCategoryBalance> MonthlySubCategoryBalance(int budgetId, int year, int? month)
-        => FromExpression(() => MonthlySubCategoryBalance(budgetId, year, month));
+    public IQueryable<MonthlySubCategoryBalance> GetMonthlySubCategoryBalance(int budgetId, int year, int? month)
+        => FromExpression(() => GetMonthlySubCategoryBalance(budgetId, year, month));
+
+    public IQueryable<YearToDateBalance> GetYearToDateBalance(int budgetId)
+        => FromExpression(() => GetYearToDateBalance(budgetId));
 }

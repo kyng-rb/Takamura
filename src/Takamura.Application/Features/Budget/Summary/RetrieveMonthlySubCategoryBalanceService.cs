@@ -20,7 +20,7 @@ public class RetrieveMonthlySubCategoryBalanceService(DatabaseContext dbContext)
         if (input.Month.HasValue && (input.Month < 1 || input.Month > 12))
             return Result.Fail(new Error("Invalid Month"));
 
-        var records = await _dbContext.MonthlySubCategoryBalance(input.BudgetId, input.Year, input.Month)
+        var records = await _dbContext.GetMonthlySubCategoryBalance(input.BudgetId, input.Year, input.Month)
             .ToListAsync()
             .ConfigureAwait(false);
 

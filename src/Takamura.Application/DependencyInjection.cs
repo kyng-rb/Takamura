@@ -28,6 +28,7 @@ public static class DependencyInjection
 
         services.AddScoped<RetrieveMonthlyCategoryBalanceService>();
         services.AddScoped<RetrieveMonthlySubCategoryBalanceService>();
+        services.AddScoped<RetrieveMonthlyCategoryBalanceReportService>();
 
         services.AddScoped<CreateBillService>();
         services.AddScoped<RetrieveBillsService>();

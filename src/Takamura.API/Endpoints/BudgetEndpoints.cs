@@ -29,6 +29,9 @@ public static class BudgetEndpoints
         group.MapGet("/{id:int}/categorybalance", async ([FromRoute] int id, [FromQuery] int year, [FromQuery] int? month, [FromServices] RetrieveMonthlyCategoryBalanceService service)
             => await service.Handle(new RetrieveMonthlyCategoryBalanceServiceInput(id, year, month)).ToHttp());
 
+        group.MapGet("/{id:int}/report", async ([FromRoute] int id, [FromQuery] int year, [FromServices] RetrieveMonthlyCategoryBalanceReportService service)
+            => await service.Handle(new RetrieveMonthlyCategoryBalanceReportServiceInput(id, year)).ToHttp());
+
         group.MapPost("/{id}/allocation", async ([FromRoute] int id, [FromBody] AttachPeriodAllocationRequest input, [FromServices] AttachPeriodAllocationService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp());
 
@@ -53,10 +56,10 @@ public static class BudgetEndpoints
             => new(budgetId, Year, Month, SubCategoryId, CategoryId, Type);
     }
 
-    public record CreateBillRequest(DateOnly Date, decimal Amount, string Description, int SubCategoryId)
+    public record CreateBillRequest(DateTime Date, decimal Amount, string Description, int SubCategoryId)
     {
         public CreateBillServiceInput ToServiceInput(int budgetId)
-                  => new(Date, Amount, Description, budgetId, SubCategoryId);
+                  => new(DateOnly.FromDateTime(Date), Amount, Description, budgetId, SubCategoryId);
     }
 
     public record RetrieveBillsRequest(
