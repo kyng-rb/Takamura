@@ -17,7 +17,8 @@ public static class BudgetEndpoints
         var group = app.MapGroup(Section);
 
         group.MapGet("/", async ([FromServices] RetrieveBudgetsService service)
-            => await service.Handle().ToHttp());
+            => await service.Handle().ToHttp())
+            .Produces<RetrieveBudgetsOutput>();
 
         group.MapPost("/", async ([FromBody] CreateBudgetServiceInput input, [FromServices] CreateBudgetService service)
             => await service.Handle(input).ToHttp());
@@ -26,10 +27,12 @@ public static class BudgetEndpoints
             => await service.Handle(input.ToServiceInput(id)).ToHttp());
 
         group.MapGet("/{id}/allocation", async ([FromRoute] int id, [AsParameters] RetrievePeriodAllocationRequest input, [FromServices] RetrievePeriodAllocationsService service)
-            => await service.Handle(input.ToServiceInput(id)).ToHttp());
+            => await service.Handle(input.ToServiceInput(id)).ToHttp())
+            .Produces<RetrievePeriodAllocationsOutput>();
 
         group.MapGet("/{id:int}/bill", async ([FromRoute] int id, [AsParameters] RetrieveBillsRequest input, [FromServices] RetrieveBillsService service)
-            => await service.Handle(input.ToServiceInput(id)).ToHttp());
+            => await service.Handle(input.ToServiceInput(id)).ToHttp())
+            .Produces<RetrieveBillsOutput>();
 
         group.MapPost("/{id}/bill", async ([FromRoute] int id, [FromBody] CreateBillRequest input, [FromServices] CreateBillService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp());

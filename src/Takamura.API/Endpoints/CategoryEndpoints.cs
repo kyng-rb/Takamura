@@ -14,7 +14,8 @@ public static class CategoryEndpoints
         var group = app.MapGroup(Section);
 
         group.MapGet("/", async (RetrieveCategoriesService service)
-            => await service.Handle().ToHttp());
+            => await service.Handle().ToHttp())
+            .Produces<IEnumerable<Category>>(); ;
 
         group.MapPost("/", async (CreateCategoryService service, CreateCategoryServiceInput input)
             => await service.Handle(input).ToHttp());
