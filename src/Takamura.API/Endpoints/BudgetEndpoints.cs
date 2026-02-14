@@ -5,6 +5,7 @@ using Takamura.Application.Features.Bill.Retrieve;
 using Takamura.Application.Features.Budget.AttachPeriod;
 using Takamura.Application.Features.Budget.Create;
 using Takamura.Application.Features.Budget.Retrieve;
+using Takamura.Application.Features.Budget.Summary;
 
 namespace Takamura.API.Endpoints;
 
@@ -22,6 +23,15 @@ public static class BudgetEndpoints
 
         group.MapPost("/", async ([FromBody] CreateBudgetServiceInput input, [FromServices] CreateBudgetService service)
             => await service.Handle(input).ToHttp());
+
+        group.MapGet("/{id:int}/subcategorybalance", async ([FromRoute] int id, [FromQuery] int year, [FromQuery] int? month, [FromServices] RetrieveMonthlySubCategoryBalanceService service)
+            => await service.Handle(new RetrieveMonthlySubCategoryBalanceServiceInput(id, year, month)).ToHttp());
+
+        group.MapGet("/{id:int}/categorybalance", async ([FromRoute] int id, [FromQuery] int year, [FromQuery] int? month, [FromServices] RetrieveMonthlyCategoryBalanceService service)
+            => await service.Handle(new RetrieveMonthlyCategoryBalanceServiceInput(id, year, month)).ToHttp());
+
+        group.MapGet("/{id:int}/report", async ([FromRoute] int id, [FromQuery] int year, [FromServices] RetrieveMonthlyCategoryBalanceReportService service)
+            => await service.Handle(new RetrieveMonthlyCategoryBalanceReportServiceInput(id, year)).ToHttp());
 
         group.MapPost("/{id}/allocation", async ([FromRoute] int id, [FromBody] AttachPeriodAllocationRequest input, [FromServices] AttachPeriodAllocationService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp());
@@ -49,10 +59,10 @@ public static class BudgetEndpoints
             => new(budgetId, Year, Month, SubCategoryId, CategoryId, Type);
     }
 
-    public record CreateBillRequest(DateOnly Date, decimal Amount, string Description, int SubCategoryId)
+    public record CreateBillRequest(DateTime Date, decimal Amount, string Description, int SubCategoryId)
     {
         public CreateBillServiceInput ToServiceInput(int budgetId)
-                  => new(Date, Amount, Description, budgetId, SubCategoryId);
+                  => new(DateOnly.FromDateTime(Date), Amount, Description, budgetId, SubCategoryId);
     }
 
     public record RetrieveBillsRequest(
@@ -65,9 +75,9 @@ public static class BudgetEndpoints
             => new(budgetId, From, To, CategoryId, SubCategoryId);
     }
 
-    public record AttachPeriodAllocationRequest(int SubCategoryId, int Month, int Year, decimal Amount, string Type)
+    public record AttachPeriodAllocationRequest(int SubCategoryId, int Month, int Year, string Description, decimal Amount, string Type)
     {
         public AttachPeriodAllocationServiceInput ToServiceInput(int budgetId)
-            => new(budgetId, SubCategoryId, Month, Year, Amount, Type);
+            => new(budgetId, SubCategoryId, Month, Year, Description, Amount, Type);
     }
 }

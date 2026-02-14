@@ -110,6 +110,7 @@ namespace Takamura.Application.Database.Migrations
                     MonthFrom = table.Column<int>(type: "int", nullable: false),
                     YearFrom = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Description = table.Column<string>(type: "varchar(100)", nullable: false),
                     SubCategoryId = table.Column<int>(type: "int", nullable: false),
                     BudgetId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(20)", nullable: false),

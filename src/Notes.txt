@@ -1,0 +1,24 @@
+- Crear Presupuesto
+- Listar presupuestos
+- Modificar nombre de presupuesto
+
+- Crear Presupuesto para el mes
+- Listar monto disponible para el presupuesto
+- Replicar presupuesto de un mes en especifico
+- Listar presupuesto del mes
+
+- Crear categoria
+- Listar categorias
+- Modificar nombre de categoria
+- Eliminar categoria
+- Crear subcategoria
+- Listar subcategorias
+- Modificar nombre de subcategoria
+- Eliminar subcategoria
+
+- Reporte: Balance mensual del presupuesto a nivel de subcategoria
+- Reporte: Balance mensual del presupuesto a nivel de categoria
+- Reporte: Balance anual del presupuesto a nivel de categoria
+- Reporte: Balance anual del presupuesto a nivel de subcategoria
+- Reporte: Balance anual del presupuesto a nivel de presupuesto
+- Reporte: Balance mensual del presupuesto a nivel de presupuesto

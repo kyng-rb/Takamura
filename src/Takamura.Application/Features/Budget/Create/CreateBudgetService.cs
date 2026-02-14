@@ -2,7 +2,7 @@ using FluentResults;
 using Humanizer;
 using Takamura.Application.Database;
 using Takamura.Application.Database.Entities.Budget;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 
 namespace Takamura.Application.Features.Budget.Create;
 
@@ -62,7 +62,13 @@ public record CreateBudgetServiceInput(
 
         foreach (var allocation in Allocations)
         {
-            var periodBudget = PeriodAllocationEntity.Create(budget.Id, allocation.SubCategoryId, allocation.MonthFrom, allocation.YearFrom, allocation.Amount, allocation.Type);
+            var periodBudget = PeriodAllocationEntity.Create(budget.Id,
+                allocation.SubCategoryId,
+                allocation.MonthFrom,
+                allocation.YearFrom,
+                allocation.Description,
+                allocation.Amount,
+                allocation.Type);
             budget.AddPeriodBudget(periodBudget);
         }
 
@@ -74,5 +80,6 @@ public record CreateBudgetPeriodAllocationInput(
     int SubCategoryId,
     int MonthFrom,
     int YearFrom,
+    string Description,
     decimal Amount,
     string Type);

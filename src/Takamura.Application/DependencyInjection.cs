@@ -6,6 +6,7 @@ using Takamura.Application.Features.Bill.Retrieve;
 using Takamura.Application.Features.Budget.AttachPeriod;
 using Takamura.Application.Features.Budget.Create;
 using Takamura.Application.Features.Budget.Retrieve;
+using Takamura.Application.Features.Budget.Summary;
 using Takamura.Application.Features.Category.AttachSubCategory;
 using Takamura.Application.Features.Category.Create;
 using Takamura.Application.Features.Category.Retrieve;
@@ -24,6 +25,10 @@ public static class DependencyInjection
         services.AddScoped<RetrieveBudgetsService>();
         services.AddScoped<AttachPeriodAllocationService>();
         services.AddScoped<RetrievePeriodAllocationsService>();
+
+        services.AddScoped<RetrieveMonthlyCategoryBalanceService>();
+        services.AddScoped<RetrieveMonthlySubCategoryBalanceService>();
+        services.AddScoped<RetrieveMonthlyCategoryBalanceReportService>();
 
         services.AddScoped<CreateBillService>();
         services.AddScoped<RetrieveBillsService>();

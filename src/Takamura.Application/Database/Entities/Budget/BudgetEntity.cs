@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Takamura.Application.Database.Entities.Base;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 
 namespace Takamura.Application.Database.Entities.Budget;
 
