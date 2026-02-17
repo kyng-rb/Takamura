@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Takamura.Application.Database.Entities.Bill;
 using Takamura.Application.Database.Entities.Budget;
 using Takamura.Application.Database.Entities.Category;
@@ -15,14 +14,6 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
 
         base.OnModelCreating(modelBuilder);
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.EnableSensitiveDataLogging();
-        optionsBuilder.EnableDetailedErrors();
-        optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
-        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

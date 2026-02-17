@@ -5,6 +5,18 @@ using Takamura.Application.Database.Entities.Budget;
 
 namespace Takamura.Application.Features.Budget.Retrieve;
 
+public record BudgetOutput(int Id, string Title);
+
+public record RetrieveBudgetsOutput(IEnumerable<BudgetOutput> Budgets)
+{
+    public static RetrieveBudgetsOutput FromEntities(IEnumerable<BudgetEntity> budgets)
+    {
+        var outputs = budgets.Select(x => new BudgetOutput(x.Id, x.Title));
+
+        return new RetrieveBudgetsOutput(outputs);
+    }
+}
+
 public class RetrieveBudgetsService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
@@ -17,17 +29,5 @@ public class RetrieveBudgetsService(DatabaseContext context)
             .ConfigureAwait(false);
 
         return Result.Ok(RetrieveBudgetsOutput.FromEntities(budgets));
-    }
-}
-
-public record BudgetOutput(int Id, string Tile);
-
-public record RetrieveBudgetsOutput(IEnumerable<BudgetOutput> Budgets)
-{
-    public static RetrieveBudgetsOutput FromEntities(IEnumerable<BudgetEntity> budgets)
-    {
-        var outputs = budgets.Select(x => new BudgetOutput(x.Id, x.Title));
-
-        return new RetrieveBudgetsOutput(outputs);
     }
 }

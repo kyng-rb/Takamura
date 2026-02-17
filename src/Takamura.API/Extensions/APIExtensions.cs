@@ -4,9 +4,9 @@ using Takamura.Application;
 
 namespace Takamura.API.Extensions;
 
-public static class APIExtensions
+public static class ApiExtensions
 {
-    public static WebApplication ConfigureAPI(this WebApplicationBuilder builder)
+    public static WebApplication ConfigureApi(this WebApplicationBuilder builder)
     {
         var app = builder.Build();
         app.UseHttpsRedirection();
@@ -29,8 +29,9 @@ public static class APIExtensions
         builder.Services.AddOpenApi();
 
         var databaseConnectionString = builder.Configuration.GetConnectionString("TakamuraConnectionString");
+        var isDevelopment = builder.Environment.IsDevelopment();
 
-        builder.Services.AddDatabaseContext(databaseConnectionString!);
+        builder.Services.AddDatabaseContext(databaseConnectionString!, isDevelopment);
         builder.Services.AddApplicationServices();
         return builder;
     }

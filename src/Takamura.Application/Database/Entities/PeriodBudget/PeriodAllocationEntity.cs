@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Humanizer;
 using Takamura.Application.Database.Entities.Base;
 using Takamura.Application.Database.Entities.Budget;
 using Takamura.Application.Database.Entities.SubCategory;
@@ -10,6 +9,8 @@ namespace Takamura.Application.Database.Entities.PeriodBudget;
 public class PeriodAllocationEntity : EntityBase
 {
     public required decimal Amount { get; set; }
+
+    public required string Description { get; set; }
 
     public required int MonthFrom { get; set; }
 
@@ -25,22 +26,25 @@ public class PeriodAllocationEntity : EntityBase
 
     public BudgetEntity Budget { get; set; } = null!;
 
-    public static PeriodAllocationEntity Create(int budgetId,
-                                            int subCategoryId,
-                                            int month,
-                                            int year,
-                                            decimal amount,
-                                            string type)
+    public static PeriodAllocationEntity Create(
+        int budgetId,
+        string budgetDescription,
+        int subCategoryId,
+        int month,
+        int year,
+        decimal amount,
+        BudgetType type)
     {
         return new PeriodAllocationEntity
         {
             Id = 0,
+            Description = budgetDescription,
             BudgetId = budgetId,
             SubCategoryId = subCategoryId,
             MonthFrom = month,
             YearFrom = year,
             Amount = amount,
-            Type = type.DehumanizeTo<BudgetType>(),
+            Type = type,
             CreatedAt = DateTime.UtcNow,
             Status = Base.Enums.Status.Created
         };
