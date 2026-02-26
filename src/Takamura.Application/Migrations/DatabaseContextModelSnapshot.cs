@@ -8,7 +8,7 @@ using Takamura.Application.Database;
 
 #nullable disable
 
-namespace Takamura.Application.Database.Migrations
+namespace Takamura.Application.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
@@ -21,6 +21,40 @@ namespace Takamura.Application.Database.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Takamura.Application.Database.Entities.Balance.MonthlySubCategoryBalanceEntity", b =>
+                {
+                    b.Property<decimal>("AvailableAmount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Available_Amount");
+
+                    b.Property<string>("Budget")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int")
+                        .HasColumnName("Month");
+
+                    b.Property<decimal>("PeriodBudget")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Period_Budget");
+
+                    b.Property<string>("SubCategory")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("Sub_Category");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int")
+                        .HasColumnName("Year");
+
+                    b.ToTable("MonthlySubCategoryBalanceEntity");
+                });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.Bill.BillEntity", b =>
                 {
@@ -117,64 +151,6 @@ namespace Takamura.Application.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Comida",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Hipoteca",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Mantenimiento de la casita",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Animalijos",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Entretenimiento personal",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Ahorro",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Inesperados",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Vehiculos",
-                            Status = "Created"
-                        });
                 });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodAllocationEntity", b =>
@@ -193,6 +169,10 @@ namespace Takamura.Application.Database.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime?>("LastUpdateAt")
                         .HasColumnType("datetime");
@@ -253,128 +233,6 @@ namespace Takamura.Application.Database.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("SubCategory");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Comida",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 2,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Hipoteca mensual",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 3,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Electricidad",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 3,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Mantenimiento",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 3,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Limpieza",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CategoryId = 4,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Animalijos",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryId = 8,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Gasolina",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CategoryId = 8,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Lavado",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CategoryId = 5,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Reynaldo",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CategoryId = 5,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Jenifer",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CategoryId = 3,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Internet residencial",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CategoryId = 6,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Ahorro principal",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CategoryId = 6,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Ayuda a los viejos",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CategoryId = 2,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Hipoteca adelantada",
-                            Status = "Created"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CategoryId = 7,
-                            CreatedAt = new DateTime(2025, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Inesperado",
-                            Status = "Created"
-                        });
                 });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.Bill.BillEntity", b =>

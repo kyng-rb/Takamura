@@ -5,6 +5,7 @@ using CreateBill;
 using CreateBudget;
 using RetrieveBills;
 using RetrieveBudgets;
+using RetrieveMonthlySubCategoryBalance;
 using RetrievePeriodAllocations;
 
 public static class BudgetEndpointGroup
@@ -19,6 +20,7 @@ public static class BudgetEndpointGroup
         CreateBudgetEndpoint.Map(group);
         AttachPeriodAllocationEndpoint.Map(group);
         RetrievePeriodAllocationsEndpoint.Map(group);
+        RetrieveMonthlySubCategoryBalanceEndpoint.Map(group);
         RetrieveBillsEndpoint.Map(group);
         CreateBillEndpoint.Map(group);
     }
