@@ -1,0 +1,56 @@
+@page "/budgets/{BudgetId:int}/bills"
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6">
+    @if (_loading)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+    }
+    else
+    {
+        <MudDataGrid T="Takamura.Web.Services.Bills.Retrieve.BillsRetrieveItem"
+                     Items="@_bills"
+                     QuickFilter="QuickFilter"
+                     RowsPerPage="100"
+                     Dense="true"
+                     Hover="true"
+                     Striped="true"
+                     ReadOnly="true"
+                     SortMode="SortMode.Multiple"
+                     Filterable="true"
+                     FilterMode="DataGridFilterMode.ColumnFilterMenu"
+                     Hideable="true"
+                     ShowColumnOptions="true"
+                     ShowMenuIcon="true">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Registered Bills</MudText>
+                <MudSpacer/>
+                <MudTextField @bind-Value="_search"
+                              Placeholder="Search"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense"
+                              Immediate="true"
+                              Class="mr-2"
+                              Style="min-width: 360px;" />
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary"
+                           Size="Size.Medium" OnClick="OpenCreateBillDialog">Add
+                </MudButton>
+            </ToolBarContent>
+            <Columns>
+                <PropertyColumn Property="x => x.Category" Title="Category"/>
+                <PropertyColumn Property="x => x.SubCategory" Title="SubCategory"/>
+                <PropertyColumn Property="x => x.Date" Title="Date">
+                    <CellTemplate>@context.Item.Date.ToString("yyyy/MM/dd")</CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.Description" Title="Description"/>
+                <PropertyColumn Property="x => x.Amount" Title="Amount">
+                    <CellTemplate>@context.Item.Amount.ToString("C1", _usdCulture)</CellTemplate>
+                </PropertyColumn>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="Takamura.Web.Services.Bills.Retrieve.BillsRetrieveItem"/>
+            </PagerContent>
+        </MudDataGrid>
+    }
+</MudContainer>

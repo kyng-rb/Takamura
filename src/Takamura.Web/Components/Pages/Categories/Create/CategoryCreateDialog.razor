@@ -1,0 +1,40 @@
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="_form">
+            <MudTextField Label="Category description"
+                          @bind-Value="_model.Description"
+                          Variant="Variant.Outlined"
+                          Required="true" />
+
+            <div class="d-flex align-center justify-space-between mt-4 mb-2">
+                <MudText Typo="Typo.subtitle1">Subcategories</MudText>
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.Add"
+                           OnClick="AddSubCategory">
+                    Add subcategory
+                </MudButton>
+            </div>
+
+            @for (var i = 0; i < _model.SubCategories.Count; i++)
+            {
+                var index = i;
+                <div class="d-flex align-center mb-2">
+                    <MudTextField Label="@($"Subcategory {index + 1}")"
+                                  @bind-Value="_model.SubCategories[index].Description"
+                                  Variant="Variant.Outlined"
+                                  Required="true"
+                                  Class="flex-grow-1" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Disabled="_model.SubCategories.Count == 1"
+                                   OnClick="@(() => RemoveSubCategory(index))" />
+                </div>
+            }
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Disabled="_loading">Add</MudButton>
+    </DialogActions>
+</MudDialog>

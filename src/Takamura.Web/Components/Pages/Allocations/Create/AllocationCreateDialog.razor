@@ -1,0 +1,95 @@
+@using Takamura.Web.Services.Category.Retrieve
+
+<MudDialog>
+    <DialogContent>
+        @if (_loading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+        }
+        else
+        {
+            <MudForm @ref="_form">
+                <MudSelect Label="Select category"
+                           T="int?"
+                           Value="_selectedCategoryId"
+                           ValueChanged="OnCategoryChanged"
+                           Required="true"
+                           Placeholder="Select category"
+                           Variant="Variant.Outlined">
+                    @foreach (var item in _categories)
+                    {
+                        <MudSelectItem Value="@((int?)item.Id)">@item.Description</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Select sub category"
+                           T="int?"
+                           @key="_selectedCategoryId"
+                           @bind-Value="_model.SubCategoryId"
+                           Placeholder="Select sub category"
+                           Disabled="!_subCategories.Any()"
+                           Required="true"
+                           Variant="Variant.Outlined">
+                    @foreach (var item in _subCategories)
+                    {
+                        <MudSelectItem Value="@((int?)item.Id)">@item.Description</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect T="int"
+                           Label="Year"
+                           Value="_model.Year ?? DateTime.Today.Year"
+                           ValueChanged="OnYearChanged"
+                           Variant="Variant.Outlined"
+                           Margin="Margin.Dense">
+                    @foreach (var year in _availableYears)
+                    {
+                        <MudSelectItem Value="@year">@year</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Month"
+                           T="int?"
+                           @bind-Value="_model.Month"
+                           Required="true"
+                           Variant="Variant.Outlined">
+                    @foreach (var month in _months)
+                    {
+                        <MudSelectItem Value="@((int?)month.Month)">@month.Label</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudTextField Label="Description"
+                              @bind-Value="_model.Description"
+                              Variant="Variant.Outlined"
+                              Required="true" />
+
+                <MudNumericField Label="Amount (USD)"
+                                 T="decimal?"
+                                 Value="_model.Amount"
+                                 ValueChanged="OnAmountChanged"
+                                 Variant="Variant.Outlined"
+                                 Required="true"
+                                 Min="0"
+                                 Step="0.1m"
+                                 Format="C1"
+                                 Culture="_usdCulture"
+                                 Validation="_amountValidation"
+                                 HideSpinButtons="true" />
+
+                <MudSelect Label="Type"
+                           T="string"
+                           @bind-Value="_model.Type"
+                           Required="true"
+                           Variant="Variant.Outlined">
+                    <MudSelectItem Value="@("Income")">Income</MudSelectItem>
+                    <MudSelectItem Value="@("Outcome")">Outcome</MudSelectItem>
+                </MudSelect>
+            </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Disabled="_loading">Add</MudButton>
+    </DialogActions>
+</MudDialog>

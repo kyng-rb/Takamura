@@ -1,0 +1,79 @@
+@using Takamura.Web.Services.Allocation.Retrieve
+
+<MudDialog>
+    <DialogContent>
+        @if (!string.IsNullOrWhiteSpace(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Class="mb-4">
+                @_errorMessage
+            </MudAlert>
+        }
+
+        @if (_loading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+        }
+        else
+        {
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudSelect T="int"
+                               Label="Target Year"
+                               Value="_targetYear"
+                               ValueChanged="OnYearChanged"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.Dense">
+                        @foreach (var year in _availableYears)
+                        {
+                            <MudSelectItem Value="@year">@year</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudSelect T="int?"
+                               Label="Target Month"
+                               Value="_targetMonth"
+                               ValueChanged="OnMonthChanged"
+                               Placeholder="Select month"
+                               Variant="Variant.Outlined"
+                               Margin="Margin.Dense">
+                        @foreach (var month in _months)
+                        {
+                            <MudSelectItem Value="@((int?)month.Month)">@month.Label</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+
+            <MudText Typo="Typo.subtitle2" Class="mt-3 mb-2">Source: @_sourceYear / @(_sourceMonth is null ? "-" : MonthName(_sourceMonth.Value))</MudText>
+
+            <MudTable Items="_items" Dense="true" Hover="true" Striped="true">
+                <HeaderContent>
+                    <MudTh>Category</MudTh>
+                    <MudTh>Subcategory</MudTh>
+                    <MudTh>Description</MudTh>
+                    <MudTh>Type</MudTh>
+                    <MudTh>Amount</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.Category</MudTd>
+                    <MudTd>@context.SubCategory</MudTd>
+                    <MudTd>@context.Description</MudTd>
+                    <MudTd>@context.Type</MudTd>
+                    <MudTd>@context.Amount.ToString("C1", _usdCulture)</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="@(() => RemoveItem(context.Id))" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Disabled="_loading">Copy</MudButton>
+    </DialogActions>
+</MudDialog>

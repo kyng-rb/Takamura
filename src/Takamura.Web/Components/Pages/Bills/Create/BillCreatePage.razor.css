@@ -1,0 +1,32 @@
+.bill-create-dialog {
+    border-radius: 16px;
+}
+
+.dialog-head {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dialog-subtitle {
+    color: rgba(0, 0, 0, 0.58);
+    margin-top: 2px;
+}
+
+.bill-create-form {
+    display: grid;
+    gap: 12px;
+    padding-top: 4px;
+}
+
+:deep(.mud-dialog-content) {
+    padding: 20px 24px 8px;
+}
+
+:deep(.mud-dialog-actions) {
+    padding: 8px 24px 20px;
+}
+
+:deep(.mud-input-control > .mud-input-control-input-container) {
+    border-radius: 10px;
+}

@@ -1,0 +1,102 @@
+@page "/budgets/{BudgetId:int}/allocations"
+
+<MudContainer MaxWidth="MaxWidth.False" Class="mt-6 px-2 px-sm-6">
+    @if (_loading)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+    }
+    else
+    {
+        @if (!string.IsNullOrWhiteSpace(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Filled" Class="mb-3">
+                @_errorMessage
+            </MudAlert>
+        }
+
+        <MudPaper Outlined="true" Elevation="0" Class="pa-2">
+            <div style="overflow-x:auto;">
+                <MudDataGrid T="AllocationGridRow"
+                             Items="@_rows"
+                             Dense="true"
+                             Hover="true"
+                             Striped="true"
+                             ReadOnly="true"
+                             SortMode="SortMode.Multiple"
+                             Groupable="true"
+                             GroupExpanded="true"
+                             Filterable="true"
+                             FilterMode="DataGridFilterMode.ColumnFilterMenu"
+                             Hideable="true"
+                             ShowColumnOptions="true"
+                             ShowMenuIcon="true">
+                    <ToolBarContent>
+                        <MudText Typo="Typo.h6">Allocations (@_year)</MudText>
+                        <MudSpacer />
+                        <MudButton Variant="Variant.Filled"
+                                   StartIcon="@Icons.Material.Filled.Add"
+                                   Color="Color.Primary"
+                                   Size="Size.Medium"
+                                   Class="mr-2"
+                                   OnClick="OpenCreateAllocationDialog">
+                            Add
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled"
+                                   StartIcon="@Icons.Material.Filled.ContentCopy"
+                                   Color="Color.Primary"
+                                   Size="Size.Medium"
+                                   OnClick="OpenCopyAllocationDialog">
+                            Copy To
+                        </MudButton>
+                        <MudSpacer />
+                        <MudSelect T="int"
+                                   Label="Year"
+                                   Value="_year"
+                                   ValueChanged="OnYearChanged"
+                                   Variant="Variant.Outlined"
+                                   Margin="Margin.Dense">
+                            @foreach (var year in _availableYears)
+                            {
+                                <MudSelectItem Value="@year">@year</MudSelectItem>
+                            }
+                        </MudSelect>
+                        <MudSelect T="int?"
+                                   Label="Month"
+                                   Placeholder="Select month"
+                                   Value="_month"
+                                   ValueChanged="OnMonthChanged"
+                                   Variant="Variant.Outlined"
+                                   Margin="Margin.Dense"
+                                   Clearable="true">
+                            @foreach (var month in _months)
+                            {
+                                <MudSelectItem Value="@((int?)month.Month)">@month.Label</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </ToolBarContent>
+                    <Columns>
+                        <PropertyColumn Property="x => x.Category"
+                                        Title="Category"
+                                        Grouping="true"
+                                        GroupByOrder="0"
+                                        CellStyle="background-color: #ffd9a8; color: #111;" />
+                        <PropertyColumn Property="x => x.SubCategory"
+                                        Title="Subcategory"
+                                        Grouping="true"
+                                        GroupByOrder="1"
+                                        CellStyle="background-color: #cfe8ff; color: #111;" />
+                        <PropertyColumn Property="x => x.MonthGroup"
+                                        Title="Month"
+                                        Grouping="true"
+                                        GroupByOrder="2" />
+                        <PropertyColumn Property="x => x.Description" Title="Description" />
+                        <PropertyColumn Property="x => x.Type" Title="Type" />
+                        <PropertyColumn Property="x => x.Amount" Title="Amount" AggregateDefinition="_sumAggregate">
+                            <CellTemplate>@context.Item.Amount.ToString("C1", _usdCulture)</CellTemplate>
+                        </PropertyColumn>
+                    </Columns>
+                </MudDataGrid>
+            </div>
+        </MudPaper>
+    }
+</MudContainer>

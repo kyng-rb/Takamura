@@ -1,0 +1,174 @@
+@page "/budgets/{BudgetId:int}/balances"
+
+<MudContainer MaxWidth="MaxWidth.False" Class="mt-6 px-2 px-sm-6">
+    @if (_loading)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+    }
+    else
+    {
+        <MudPaper Outlined="true" Elevation="0" Class="pa-6">
+            @if (!_rows.Any())
+            {
+                <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+                    No balances found for the selected year.
+                </MudAlert>
+            }
+            else
+            {
+                <div style="overflow-x:auto; padding-bottom:30px; margin-bottom:10px;">
+                    <MudDataGrid T="BalanceMatrixRow"
+                                 @key="_viewLevel"
+                                 Items="@_rows"
+                                 Dense="true"
+                                 Hover="true"
+                                 Striped="true"
+                                 ReadOnly="true"
+                                 SortMode="SortMode.None"
+                                 Filterable="false"
+                                 Hideable="true"
+                                 ShowColumnOptions="true"
+                                 ShowMenuIcon="true">
+                        <ToolBarContent>
+                            <MudText Typo="Typo.h6">Balances (@_year)</MudText>
+                            <MudSpacer />
+                            <MudSelect T="BalanceViewLevel"
+                                       Label="Level"
+                                       Value="_viewLevel"
+                                       ValueChanged="OnViewLevelChanged"
+                                       Variant="Variant.Outlined"
+                                       Margin="Margin.Dense"
+                                       Class="mr-2"
+                                       Style="min-width:160px;">
+                                @foreach (var level in _viewLevels)
+                                {
+                                    <MudSelectItem Value="@level.Value">@level.Label</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <MudSelect T="BalanceTimeframe"
+                                       Label="Timeframe"
+                                       Value="_timeframe"
+                                       ValueChanged="OnTimeframeChanged"
+                                       Variant="Variant.Outlined"
+                                       Margin="Margin.Dense"
+                                       Class="mr-2"
+                                       Style="min-width:170px;">
+                                @foreach (var timeframe in _timeframes)
+                                {
+                                    <MudSelectItem Value="@timeframe.Value">@timeframe.Label</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <MudSelect T="int"
+                                       Label="Year"
+                                       Value="_year"
+                                       ValueChanged="OnYearChanged"
+                                       Variant="Variant.Outlined"
+                                       Margin="Margin.Dense"
+                                       Class="mr-2"
+                                       Style="min-width:140px;">
+                                @foreach (var year in _availableYears)
+                                {
+                                    <MudSelectItem Value="@year">@year</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </ToolBarContent>
+                        <Columns>
+                            <PropertyColumn Property="x => x.Category"
+                                            Title="Category"
+                                            StickyLeft="true"
+                                            HeaderStyle="text-align:left; min-width:180px;"
+                                            CellStyle="text-align:left; min-width:180px; background-color:#fbbf24; color:#111; font-weight:700;">
+                                <FooterTemplate>
+                                    <strong>Summary</strong>
+                                </FooterTemplate>
+                            </PropertyColumn>
+                            @if (_viewLevel == BalanceViewLevel.SubCategory)
+                            {
+                                <PropertyColumn Property="x => x.SubCategory"
+                                                Title="Subcategory"
+                                                StickyLeft="true"
+                                                HeaderStyle="text-align:left; min-width:210px;"
+                                                CellStyle="text-align:left; min-width:210px; background-color:#c4b5fd; color:#111; font-weight:600;">
+                                    <FooterTemplate>
+                                        <strong>Total</strong>
+                                    </FooterTemplate>
+                                </PropertyColumn>
+                            }
+                            @if (_timeframe == BalanceTimeframe.Monthly)
+                            {
+                                @for (var month = 1; month <= 12; month++)
+                                {
+                                    var monthNumber = month;
+                                    <TemplateColumn Title="@MonthName(monthNumber)"
+                                                    Hideable="true"
+                                                    HeaderStyle="text-align:center;"
+                                                    CellStyle="text-align:center; padding:0; height:32px;">
+                                        <CellTemplate>
+                                            @{
+                                                var cell = GetMonthCell(context.Item, monthNumber);
+                                            }
+                                            <div style="display:grid; grid-template-columns:60px 60px; justify-content:center; align-items:stretch; width:100%; height:100%; min-height:32px;">
+                                                <div style="text-align:center; display:flex; align-items:center; justify-content:center; height:100%;">
+                                                    @cell.PeriodBudget.ToString("C1", _usdCulture)
+                                                </div>
+                                                <div style="@($"{GetAvailableCellStyle(cell.AvailableAmount)} text-align:center; display:flex; align-items:center; justify-content:center; height:100%;")">
+                                                    <strong>@cell.AvailableAmount.ToString("C1", _usdCulture)</strong>
+                                                </div>
+                                            </div>
+                                        </CellTemplate>
+                                        <FooterTemplate Context="footer">
+                                            @{
+                                                var total = SumMonthFromRows(footer.Items, monthNumber);
+                                            }
+                                            <div style="display:grid; grid-template-columns:60px 60px; justify-content:center; align-items:stretch; width:100%; height:100%; min-height:32px;">
+                                                <div style="text-align:center; display:flex; align-items:center; justify-content:center; height:100%;">
+                                                    <strong>@total.PeriodBudget.ToString("C1", _usdCulture)</strong>
+                                                </div>
+                                                <div style="@($"{GetAvailableCellStyle(total.AvailableAmount)} text-align:center; display:flex; align-items:center; justify-content:center; height:100%;")">
+                                                    <strong>@total.AvailableAmount.ToString("C1", _usdCulture)</strong>
+                                                </div>
+                                            </div>
+                                        </FooterTemplate>
+                                    </TemplateColumn>
+                                }
+                            }
+                            else
+                            {
+                                <TemplateColumn Title="Year To Date"
+                                                HeaderStyle="text-align:center;"
+                                                CellStyle="text-align:center; padding:0; height:32px;">
+                                    <CellTemplate>
+                                        @{
+                                            var cell = context.Item.YearToDate;
+                                        }
+                                        <div style="display:grid; grid-template-columns:60px 60px; justify-content:center; align-items:stretch; width:100%; height:100%; min-height:32px;">
+                                            <div style="text-align:center; display:flex; align-items:center; justify-content:center; height:100%;">
+                                                @cell.PeriodBudget.ToString("C1", _usdCulture)
+                                            </div>
+                                            <div style="@($"{GetAvailableCellStyle(cell.AvailableAmount)} text-align:center; display:flex; align-items:center; justify-content:center; height:100%;")">
+                                                <strong>@cell.AvailableAmount.ToString("C1", _usdCulture)</strong>
+                                            </div>
+                                        </div>
+                                    </CellTemplate>
+                                    <FooterTemplate Context="footer">
+                                        @{
+                                            var total = SumYtdFromRows(footer.Items);
+                                        }
+                                        <div style="display:grid; grid-template-columns:60px 60px; justify-content:center; align-items:stretch; width:100%; height:100%; min-height:32px;">
+                                            <div style="text-align:center; display:flex; align-items:center; justify-content:center; height:100%;">
+                                                <strong>@total.PeriodBudget.ToString("C1", _usdCulture)</strong>
+                                            </div>
+                                            <div style="@($"{GetAvailableCellStyle(total.AvailableAmount)} text-align:center; display:flex; align-items:center; justify-content:center; height:100%;")">
+                                                <strong>@total.AvailableAmount.ToString("C1", _usdCulture)</strong>
+                                            </div>
+                                        </div>
+                                    </FooterTemplate>
+                                </TemplateColumn>
+                            }
+                        </Columns>
+                    </MudDataGrid>
+                </div>
+            }
+        </MudPaper>
+    }
+</MudContainer>

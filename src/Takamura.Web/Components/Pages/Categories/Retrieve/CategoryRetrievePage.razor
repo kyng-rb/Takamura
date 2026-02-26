@@ -1,0 +1,70 @@
+@page "/categories"
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6">
+    <div class="d-flex align-center justify-space-between mb-4">
+        <MudText Typo="Typo.h4" Class="mb-0">Categories</MudText>
+        <MudButton Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   Color="Color.Primary"
+                   Size="Size.Medium"
+                   OnClick="OpenCreateCategoryDialog">
+            Add
+        </MudButton>
+    </div>
+
+    @if (_loading)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+    }
+    else if (!_categories.Any())
+    {
+        <MudText>No categories available.</MudText>
+    }
+    else
+    {
+        <MudPaper Outlined="true" Elevation="0" Class="pa-4">
+            <MudExpansionPanels MultiExpansion="true">
+                @foreach (var category in _categories)
+                {
+                    <MudExpansionPanel>
+                        <TitleContent>
+                            <div class="d-flex align-center justify-space-between w-100">
+                                <MudText Typo="Typo.h6">@category.Description</MudText>
+                                <div class="d-flex align-center">
+                                    <MudButton Variant="Variant.Text"
+                                               Color="Color.Primary"
+                                               StartIcon="@Icons.Material.Filled.Add"
+                                               Size="Size.Small"
+                                               OnClick="@(() => OpenAddSubCategoryDialog(category.Id, category.Description))">
+                                        Add subcategory
+                                    </MudButton>
+                                    <MudChip T="string" Variant="Variant.Outlined" Size="Size.Small" Class="ml-1">
+                                        @(category.SubCategories?.Length ?? 0) subcategories
+                                    </MudChip>
+                                </div>
+                            </div>
+                        </TitleContent>
+                        <ChildContent>
+                            @if (category.SubCategories is null || category.SubCategories.Length == 0)
+                            {
+                                <MudText Typo="Typo.body2">No subcategories.</MudText>
+                            }
+                            else
+                            {
+                                <MudList T="string" Dense="true">
+                                    @foreach (var subCategory in category.SubCategories)
+                                    {
+                                        <MudListItem T="string">
+                                            <MudIcon Icon="@Icons.Material.Filled.SubdirectoryArrowRight" Class="mr-2" />
+                                            @subCategory.Description
+                                        </MudListItem>
+                                    }
+                                </MudList>
+                            }
+                        </ChildContent>
+                    </MudExpansionPanel>
+                }
+            </MudExpansionPanels>
+        </MudPaper>
+    }
+</MudContainer>

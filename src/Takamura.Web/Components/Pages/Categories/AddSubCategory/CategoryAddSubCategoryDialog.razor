@@ -1,0 +1,15 @@
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="_form">
+            <MudText Typo="Typo.subtitle1" Class="mb-3">Category: @_categoryDescription</MudText>
+            <MudTextField Label="Subcategory description"
+                          @bind-Value="_description"
+                          Variant="Variant.Outlined"
+                          Required="true" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Disabled="_loading">Add</MudButton>
+    </DialogActions>
+</MudDialog>

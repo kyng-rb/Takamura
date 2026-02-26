@@ -1,0 +1,73 @@
+@using Takamura.Web.Services.Category.Retrieve
+
+<MudDialog Class="bill-create-dialog">
+    <DialogContent>
+        <div class="dialog-head">
+            <MudText Typo="Typo.h6">Create Bill</MudText>
+            <MudText Typo="Typo.body2" Class="dialog-subtitle">Minimal quick entry for the selected budget.</MudText>
+        </div>
+
+        @if (_loading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+        }
+        else
+        {
+            <MudForm @ref="_form" Class="bill-create-form">
+                <MudDatePicker Label="Date"
+                               @bind-Date="_model.Date"
+                               Required="true"
+                               Variant="Variant.Outlined" />
+
+                <MudSelect Label="Select category"
+                           T="int?"
+                           Value="_selectedCategoryId"
+                           ValueChanged="OnCategoryChanged"
+                           Required="true"
+                           Placeholder="Select category"
+                           Variant="Variant.Outlined">
+                    @foreach (var item in _categories)
+                    {
+                        <MudSelectItem Value="@((int?)item.Id)">@item.Description</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect Label="Select sub category"
+                           T="int?"
+                           @key="_selectedCategoryId"
+                           @bind-Value="_model.SubCategoryId"
+                           Placeholder="Select sub category"
+                           Disabled="!_subCategories.Any()"
+                           Required="true"
+                           Variant="Variant.Outlined">
+                    @foreach (var item in _subCategories)
+                    {
+                        <MudSelectItem Value="@((int?)item.Id)">@item.Description</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudTextField Label="Description"
+                              @bind-Value="_model.Description"
+                              Variant="Variant.Outlined"
+                              Required="true"/>
+
+                <MudNumericField Label="Amount (USD)"
+                                 T="decimal?"
+                                 Value="_model.Amount"
+                                 ValueChanged="OnAmountChanged"
+                                 Variant="Variant.Outlined"
+                                 Required="true"
+                                 Min="0"
+                                 Step="0.1m"
+                                 Format="C1"
+                                 Culture="_usdCulture"
+                                 Validation="_amountValidation"
+                                 HideSpinButtons="true" />
+            </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Disabled="_loading">Add</MudButton>
+    </DialogActions>
+</MudDialog>
