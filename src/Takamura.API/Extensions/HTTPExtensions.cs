@@ -11,8 +11,11 @@ public static class HttpExtensions
         if (serviceResult.IsSuccess)
             return Results.NoContent();
 
-        return Results.BadRequest(serviceResult.Errors[0].Message);
+        return Results.BadRequest(ErrorMessage(serviceResult.Errors));
     }
+
+    private static string ErrorMessage(IEnumerable<IError> errors)
+        => string.Join(" ", errors.Select(e => e.Message));
 
     public static async Task<IResult> ToHttp<T>(this Task<Result<T>> task)
     {
@@ -21,6 +24,6 @@ public static class HttpExtensions
         if (serviceResult.IsSuccess)
             return Results.Ok(serviceResult.Value);
 
-        return Results.BadRequest(serviceResult.Errors[0].Message);
+        return Results.BadRequest(ErrorMessage(serviceResult.Errors));
     }
 }

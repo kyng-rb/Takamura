@@ -47,6 +47,7 @@ public partial class BillCreatePage : IDisposable
     private int? _selectedCategoryId;
     private MudForm _form = new();
     private bool _loading;
+    private string? _errorMessage;
 
     public BillCreatePage(
         CategoryRetrieveService categoryRetrieveService,
@@ -77,6 +78,7 @@ public partial class BillCreatePage : IDisposable
 
     private async Task Submit()
     {
+        _errorMessage = null;
         await ErrorRedirectExecutor.Run(async () =>
         {
             await _form.Validate();
@@ -86,7 +88,7 @@ public partial class BillCreatePage : IDisposable
             var input = _model.ToServiceInput(BudgetId);
             await _billsCreateService.Handle(input, _requestCts.Token);
             MudDialog.Close(DialogResult.Ok(true));
-        }, Nav);
+        }, Nav, onValidationError: message => _errorMessage = message);
     }
 
     private void Cancel()

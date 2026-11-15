@@ -34,6 +34,7 @@ public partial class CategoryCreateDialog : IDisposable
     private readonly CategoryCreateDialogModel _model = new();
     private MudForm _form = new();
     private bool _loading;
+    private string? _errorMessage;
 
     private void AddSubCategory()
     {
@@ -50,6 +51,7 @@ public partial class CategoryCreateDialog : IDisposable
 
     private async Task Submit()
     {
+        _errorMessage = null;
         await ErrorRedirectExecutor.Run(async () =>
         {
             await _form.Validate();
@@ -64,15 +66,24 @@ public partial class CategoryCreateDialog : IDisposable
                 .Select(x => new CategoryCreateSubCategoryInput(x))
                 .ToArray();
 
-            if (string.IsNullOrWhiteSpace(description) || subCategories.Length == 0)
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                _errorMessage = "Category description cannot be empty.";
                 return;
+            }
+
+            if (subCategories.Length == 0)
+            {
+                _errorMessage = "Add at least one subcategory.";
+                return;
+            }
 
             _loading = true;
             await CategoryCreateService.Handle(
                 new CategoryCreateInput(description, subCategories),
                 _requestCts.Token);
             MudDialog.Close(DialogResult.Ok(true));
-        }, Nav, () => _loading = false);
+        }, Nav, () => _loading = false, message => _errorMessage = message);
     }
 
     private void Cancel()

@@ -9,6 +9,10 @@ public static class ApiExtensions
     public static WebApplication ConfigureApi(this WebApplicationBuilder builder)
     {
         var app = builder.Build();
+
+        // Unhandled exceptions -> 500 problem details (instead of an empty body).
+        app.UseExceptionHandler();
+        app.UseStatusCodePages();
         app.UseHttpsRedirection();
 
         app.MapEndpoints();
@@ -27,6 +31,9 @@ public static class ApiExtensions
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddOpenApi();
+
+        // Model-binding failures (bad JSON, wrong types) and errors return RFC 7807 problem details.
+        builder.Services.AddProblemDetails();
 
         var databaseConnectionString = builder.Configuration.GetConnectionString("TakamuraConnectionString");
         var isDevelopment = builder.Environment.IsDevelopment();

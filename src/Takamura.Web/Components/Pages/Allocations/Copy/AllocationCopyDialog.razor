@@ -4,7 +4,7 @@
     <DialogContent>
         @if (!string.IsNullOrWhiteSpace(_errorMessage))
         {
-            <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Class="mb-4">
+            <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Class="mb-4" ShowCloseIcon="true" CloseIconClicked="() => _errorMessage = null">
                 @_errorMessage
             </MudAlert>
         }

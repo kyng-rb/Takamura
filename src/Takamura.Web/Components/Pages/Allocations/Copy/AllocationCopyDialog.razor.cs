@@ -93,10 +93,13 @@ public partial class AllocationCopyDialog : IDisposable
         }
 
         _loading = true;
+        var copied = 0;
+        AllocationRetrieveItem? current = null;
         await ErrorRedirectExecutor.Run(async () =>
         {
-            foreach (var item in _items)
+            foreach (var item in _items.ToArray())
             {
+                current = item;
                 var input = new AllocationCreateInput(
                     BudgetId,
                     item.SubCategoryId,
@@ -107,10 +110,19 @@ public partial class AllocationCopyDialog : IDisposable
                     item.Type);
 
                 await _allocationCreateService.Handle(input, _requestCts.Token);
+
+                // Drop copied rows so a retry after a validation error doesn't duplicate them.
+                _items.Remove(item);
+                copied++;
             }
 
             MudDialog.Close(DialogResult.Ok(true));
-        }, Nav, () => _loading = false);
+        }, Nav, () => _loading = false, message =>
+        {
+            var prefix = current is null ? string.Empty : $"\"{current.Description}\": ";
+            var progress = copied > 0 ? $" ({copied} allocation(s) were copied before this error and were removed from the list.)" : string.Empty;
+            _errorMessage = prefix + message + progress;
+        });
     }
 
     private void Cancel()

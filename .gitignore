@@ -54,3 +54,15 @@ TestResult.xml
 nunit-*.xml
 src/Takamura.API/appsettings.Development.json
 src/.idea/
+
+# macOS / IDE
+.DS_Store
+.idea/
+*.DotSettings.user
+
+# Local secrets
+src/Takamura.Web/appsettings.Development.json
+.env
+
+# Claude Code (personal settings stay local; .claude/settings.json and skills are shared)
+.claude/settings.local.json

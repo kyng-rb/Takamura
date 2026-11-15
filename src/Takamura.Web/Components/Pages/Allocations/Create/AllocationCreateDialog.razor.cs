@@ -60,6 +60,7 @@ public partial class AllocationCreateDialog : IDisposable
     private int? _selectedCategoryId;
     private MudForm _form = new();
     private bool _loading;
+    private string? _errorMessage;
 
     public AllocationCreateDialog(
         CategoryRetrieveService categoryRetrieveService,
@@ -100,6 +101,7 @@ public partial class AllocationCreateDialog : IDisposable
 
     private async Task Submit()
     {
+        _errorMessage = null;
         await ErrorRedirectExecutor.Run(async () =>
         {
             await _form.Validate();
@@ -109,7 +111,7 @@ public partial class AllocationCreateDialog : IDisposable
             var input = _model.ToInput(BudgetId);
             await _allocationCreateService.Handle(input, _requestCts.Token);
             MudDialog.Close(DialogResult.Ok(true));
-        }, Nav);
+        }, Nav, onValidationError: message => _errorMessage = message);
     }
 
     private void Cancel()
