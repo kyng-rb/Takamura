@@ -45,7 +45,7 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<RetrievePeriodAllocationsOutput>> Handle(RetrievePeriodAllocationInput input)
+    public async Task<Result<RetrievePeriodAllocationsOutput>> Handle(RetrievePeriodAllocationInput input, CancellationToken cancellationToken = default)
     {
         if (input.BudgetId <= 0)
             return Result.Fail("Invalid budget id");
@@ -65,17 +65,17 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
             typeFilter = budgetType;
         }
 
-        if (!await _context.Budgets.AnyAsync(x => x.Id == input.BudgetId).ConfigureAwait(false))
+        if (!await _context.Budgets.AnyAsync(x => x.Id == input.BudgetId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("Budget does not exist");
 
-        var allocations = await GetRecords(input, typeFilter).ConfigureAwait(false);
+        var allocations = await GetRecords(input, typeFilter, cancellationToken).ConfigureAwait(false);
 
         var output = RetrievePeriodAllocationsOutput.FromEntities(allocations);
 
         return Result.Ok(output);
     }
 
-    private async Task<List<PeriodAllocationEntity>> GetRecords(RetrievePeriodAllocationInput input, BudgetType? typeFilter)
+    private async Task<List<PeriodAllocationEntity>> GetRecords(RetrievePeriodAllocationInput input, BudgetType? typeFilter, CancellationToken cancellationToken)
     {
         var allocations = _context.PeriodAllocations
                     .Where(x => x.BudgetId == input.BudgetId);
@@ -104,7 +104,7 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
             .ThenBy(x => x.SubCategory!.Description)
             .ThenBy(x => x.Id)
             .AsNoTracking()
-            .ToListAsync()
+            .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
     }
 

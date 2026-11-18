@@ -7,8 +7,8 @@ public static class RetrieveCategoriesEndpoint
 {
     public static void Map(RouteGroupBuilder group)
     {
-        group.MapGet("/", async (RetrieveCategoriesService service)
-            => await service.Handle().ToHttp())
+        group.MapGet("/", async (RetrieveCategoriesService service, CancellationToken cancellationToken)
+            => await service.Handle(cancellationToken).ToHttp())
             .Produces<RetrieveCategoriesOutput>()
             .ProducesProblem(StatusCodes.Status400BadRequest);
     }

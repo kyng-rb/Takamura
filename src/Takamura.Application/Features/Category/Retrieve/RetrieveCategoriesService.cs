@@ -22,22 +22,22 @@ public class RetrieveCategoriesService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<RetrieveCategoriesOutput>> Handle()
+    public async Task<Result<RetrieveCategoriesOutput>> Handle(CancellationToken cancellationToken = default)
     {
-        var records = await GetCategories().ConfigureAwait(false);
+        var records = await GetCategories(cancellationToken).ConfigureAwait(false);
 
         var categories = records.Select(Category.FromEntity);
 
         return Result.Ok(new RetrieveCategoriesOutput(categories));
     }
 
-    private async Task<List<CategoryEntity>> GetCategories()
+    private async Task<List<CategoryEntity>> GetCategories(CancellationToken cancellationToken)
     {
         return await _context
                     .Categories
                     .Include(x => x.SubCategories)
                     .AsNoTracking()
-                    .ToListAsync()
+                    .ToListAsync(cancellationToken)
                     .ConfigureAwait(false);
     }
 }

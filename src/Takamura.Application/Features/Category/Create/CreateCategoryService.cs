@@ -28,7 +28,7 @@ public class CreateCategoryService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<CreateCategoryOutput>> Handle(CreateCategoryServiceInput input)
+    public async Task<Result<CreateCategoryOutput>> Handle(CreateCategoryServiceInput input, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Entry description cannot be empty.");
@@ -46,13 +46,13 @@ public class CreateCategoryService(DatabaseContext context)
         if (subCategoryNames.Distinct(StringComparer.OrdinalIgnoreCase).Count() != subCategoryNames.Length)
             return Result.Fail("SubCategory descriptions must be unique.");
 
-        if (await _context.Categories.AnyAsync(x => x.Description == input.Description).ConfigureAwait(false))
+        if (await _context.Categories.AnyAsync(x => x.Description == input.Description, cancellationToken).ConfigureAwait(false))
             return Result.Fail("A category with this description already exists.");
 
         var category = input.ToEntity();
 
         _context.Categories.Add(category);
-        _ = await _context.SaveChangesAsync().ConfigureAwait(false);
+        _ = await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         return Result.Ok(new CreateCategoryOutput(category.Id));
     }
 }

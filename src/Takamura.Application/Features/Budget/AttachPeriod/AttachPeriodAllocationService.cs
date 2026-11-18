@@ -25,12 +25,12 @@ public class AttachPeriodAllocationService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<AttachPeriodAllocationOutput>> Handle(AttachPeriodAllocationServiceInput input)
+    public async Task<Result<AttachPeriodAllocationOutput>> Handle(AttachPeriodAllocationServiceInput input, CancellationToken cancellationToken = default)
     {
         if (input.BudgetId <= 0)
             return Result.Fail("Budget id is required");
 
-        var budget = await _context.Budgets.FirstOrDefaultAsync(b => b.Id == input.BudgetId).ConfigureAwait(false);
+        var budget = await _context.Budgets.FirstOrDefaultAsync(b => b.Id == input.BudgetId, cancellationToken).ConfigureAwait(false);
         if (budget == null)
             return Result.Fail("Budget does not exist");
 
@@ -55,7 +55,7 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         if (input.SubCategoryId <= 0)
             return Result.Fail("SubCategory id is required");
 
-        if (!await _context.SubCategories.AnyAsync(s => s.Id == input.SubCategoryId).ConfigureAwait(false))
+        if (!await _context.SubCategories.AnyAsync(s => s.Id == input.SubCategoryId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("SubCategory does not exist");
 
         if (string.IsNullOrWhiteSpace(input.Type))
@@ -68,14 +68,14 @@ public class AttachPeriodAllocationService(DatabaseContext context)
             .AnyAsync(x => x.BudgetId == input.BudgetId
                 && x.SubCategoryId == input.SubCategoryId
                 && x.YearFrom == input.Year
-                && x.MonthFrom == input.Month)
+                && x.MonthFrom == input.Month, cancellationToken)
             .ConfigureAwait(false);
         if (alreadyAllocated)
             return Result.Fail("This subcategory already has an allocation for that month");
 
         var periodBudget = input.ToEntity(budgetType);
         _context.Add(periodBudget);
-        _ = await _context.SaveChangesAsync().ConfigureAwait(false);
+        _ = await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         return Result.Ok(new AttachPeriodAllocationOutput(periodBudget.Id));
     }

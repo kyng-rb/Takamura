@@ -52,7 +52,7 @@ public class CreateBudgetService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<CreateBudgetOutput>> Handle(CreateBudgetServiceInput input)
+    public async Task<Result<CreateBudgetOutput>> Handle(CreateBudgetServiceInput input, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(input.Title))
             return Result.Fail("Title is required");
@@ -60,21 +60,21 @@ public class CreateBudgetService(DatabaseContext context)
         if (input.Title.Length > FieldLimits.TextMaxLength)
             return Result.Fail($"Title must be at most {FieldLimits.TextMaxLength} characters");
 
-        if (await _context.Budgets.AnyAsync(x => x.Title == input.Title).ConfigureAwait(false))
+        if (await _context.Budgets.AnyAsync(x => x.Title == input.Title, cancellationToken).ConfigureAwait(false))
             return Result.Fail("A budget with this title already exists");
 
-        var validationResult = await ValidateBudgetPeriods(input).ConfigureAwait(false);
+        var validationResult = await ValidateBudgetPeriods(input, cancellationToken).ConfigureAwait(false);
         if (validationResult.IsFailed)
             return Result.Fail(validationResult.Errors);
 
         var entity = input.ToEntity();
         _context.Add(entity);
-        _ = await _context.SaveChangesAsync().ConfigureAwait(false);
+        _ = await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         return Result.Ok(new CreateBudgetOutput(entity.Id));
     }
 
-    private async Task<Result> ValidateBudgetPeriods(CreateBudgetServiceInput input)
+    private async Task<Result> ValidateBudgetPeriods(CreateBudgetServiceInput input, CancellationToken cancellationToken)
     {
         if (input.Allocations is null || input.Allocations.Length == 0)
             return Result.Ok();
@@ -124,7 +124,7 @@ public class CreateBudgetService(DatabaseContext context)
         var existingSubCategoryIds = await _context.SubCategories
             .Where(s => subCategoryIds.Contains(s.Id))
             .Select(s => s.Id)
-            .ToListAsync()
+            .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
         var existingSubCategorySet = existingSubCategoryIds.ToHashSet();
 

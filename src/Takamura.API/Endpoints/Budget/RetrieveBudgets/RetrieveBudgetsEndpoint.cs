@@ -8,8 +8,8 @@ public static class RetrieveBudgetsEndpoint
 {
     public static void Map(RouteGroupBuilder group)
     {
-        group.MapGet("/", async ([FromServices] RetrieveBudgetsService service)
-            => await service.Handle().ToHttp())
+        group.MapGet("/", async ([FromServices] RetrieveBudgetsService service, CancellationToken cancellationToken)
+            => await service.Handle(cancellationToken).ToHttp())
             .Produces<RetrieveBudgetsOutput>()
             .ProducesProblem(StatusCodes.Status400BadRequest);
     }
