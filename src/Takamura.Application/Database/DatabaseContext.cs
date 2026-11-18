@@ -1,4 +1,7 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Takamura.Application.Database.Entities.Base;
+using Takamura.Application.Database.Entities.Base.Enums;
 using Takamura.Application.Database.Entities.Balance;
 using Takamura.Application.Database.Entities.Bill;
 using Takamura.Application.Database.Entities.Budget;
@@ -14,6 +17,8 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
 
+        ApplySoftDeleteFilter(modelBuilder);
+
         modelBuilder.Entity<MonthlySubCategoryBalanceEntity>()
             .HasNoKey();
 
@@ -25,6 +30,26 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             .HasSchema("dbo");
 
         base.OnModelCreating(modelBuilder);
+    }
+
+    /// <summary>
+    /// Hides rows with <see cref="Status.Deleted"/> from every query (including <c>AnyAsync</c> existence checks).
+    /// Use <c>IgnoreQueryFilters()</c> when a query really needs deleted rows.
+    /// </summary>
+    private static void ApplySoftDeleteFilter(ModelBuilder modelBuilder)
+    {
+        var softDeletableTypes = modelBuilder.Model.GetEntityTypes()
+            .Where(entityType => typeof(EntityBase).IsAssignableFrom(entityType.ClrType));
+
+        foreach (var entityType in softDeletableTypes)
+        {
+            var entity = Expression.Parameter(entityType.ClrType, "entity");
+            var notDeleted = Expression.NotEqual(
+                Expression.Property(entity, nameof(EntityBase.Status)),
+                Expression.Constant(Status.Deleted));
+
+            entityType.SetQueryFilter(Expression.Lambda(notDeleted, entity));
+        }
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
