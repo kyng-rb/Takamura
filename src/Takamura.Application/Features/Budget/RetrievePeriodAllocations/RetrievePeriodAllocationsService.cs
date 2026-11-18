@@ -2,9 +2,9 @@ using FluentResults;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 
-namespace Takamura.Application.Features.Budget.Retrieve;
+namespace Takamura.Application.Features.Budget.RetrievePeriodAllocations;
 
 public record RetrievePeriodAllocationsOutput(IEnumerable<PeriodAllocationOutput> Allocations)
 {

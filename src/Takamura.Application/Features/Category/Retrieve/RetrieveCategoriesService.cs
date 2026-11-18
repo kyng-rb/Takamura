@@ -5,16 +5,16 @@ using Takamura.Application.Database.Entities.Category;
 
 namespace Takamura.Application.Features.Category.Retrieve;
 
-public record RetrieveCategoriesOutput(IEnumerable<Category> Categories);
+public record RetrieveCategoriesOutput(IEnumerable<CategoryOutput> Categories);
 
-public record SubCategory(int Id, string Description);
+public record SubCategoryOutput(int Id, string Description);
 
-public record Category(int Id, string Description, IEnumerable<SubCategory> SubCategories)
+public record CategoryOutput(int Id, string Description, IEnumerable<SubCategoryOutput> SubCategories)
 {
-    public static Category FromEntity(CategoryEntity entity)
+    public static CategoryOutput FromEntity(CategoryEntity entity)
     {
-        var subCategories = entity.SubCategories.Select(x => new SubCategory(x.Id, x.Description));
-        return new Category(entity.Id, entity.Description, subCategories);
+        var subCategories = entity.SubCategories.Select(x => new SubCategoryOutput(x.Id, x.Description));
+        return new CategoryOutput(entity.Id, entity.Description, subCategories);
     }
 }
 
@@ -26,7 +26,7 @@ public class RetrieveCategoriesService(DatabaseContext context)
     {
         var records = await GetCategories(cancellationToken).ConfigureAwait(false);
 
-        var categories = records.Select(Category.FromEntity);
+        var categories = records.Select(CategoryOutput.FromEntity);
 
         return Result.Ok(new RetrieveCategoriesOutput(categories));
     }

@@ -1,4 +1,4 @@
-namespace Takamura.Application.Database.Entities.PeriodBudget;
+namespace Takamura.Application.Database.Entities.PeriodAllocation;
 
 public static class BudgetTypeParser
 {

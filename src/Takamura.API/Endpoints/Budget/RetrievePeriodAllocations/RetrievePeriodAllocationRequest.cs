@@ -1,4 +1,4 @@
-using Takamura.Application.Features.Budget.Retrieve;
+using Takamura.Application.Features.Budget.RetrievePeriodAllocations;
 
 namespace Takamura.API.Endpoints.Budget.RetrievePeriodAllocations;
 
