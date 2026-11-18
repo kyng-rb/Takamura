@@ -14,6 +14,9 @@ public class AttachSubCategoryService(DatabaseContext context)
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Entry description cannot be empty.");
 
+        if (input.Description.Length > FieldLimits.TextMaxLength)
+            return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters.");
+
         var category = await _context.Categories.FindAsync(input.CategoryId).ConfigureAwait(false);
         if (category is null)
             return Result.Fail("Category not found.");

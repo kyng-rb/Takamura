@@ -23,6 +23,9 @@ public class CreateBillService(DatabaseContext context)
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Description must not be empty");
 
+        if (input.Description.Length > FieldLimits.TextMaxLength)
+            return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters");
+
         if (input.SubCategoryId <= 0)
             return Result.Fail("SubCategoryId is required");
 
