@@ -99,10 +99,10 @@ public class CreateBudgetService(DatabaseContext context)
                 return Result.Fail($"Year must be between {FieldLimits.MinYear} and {FieldLimits.MaxYear} on the {(i + 1).Ordinalize()} allocation");
 
             if (allocation.Amount <= 0)
-                return Result.Fail($"Allocation amount must be greater than 0 on the {(i + 1).Ordinalize()} allocation");
+                return Result.Fail($"Amount must be greater than 0 on the {(i + 1).Ordinalize()} allocation");
 
             if (decimal.Round(allocation.Amount, FieldLimits.MoneyDecimals) != allocation.Amount)
-                return Result.Fail($"Allocation amount can have at most {FieldLimits.MoneyDecimals} decimal places on the {(i + 1).Ordinalize()} allocation");
+                return Result.Fail($"Amount can have at most {FieldLimits.MoneyDecimals} decimal places on the {(i + 1).Ordinalize()} allocation");
 
             if (allocation.SubCategoryId <= 0)
                 return Result.Fail($"SubCategory id is required on the {(i + 1).Ordinalize()} allocation");
@@ -117,7 +117,7 @@ public class CreateBudgetService(DatabaseContext context)
                 return Result.Fail($"Type is required on the {(i + 1).Ordinalize()} allocation");
 
             if (!BudgetTypeParser.TryParse(allocation.Type, out _))
-                return Result.Fail($"Invalid type on the {(i + 1).Ordinalize()} allocation. Allowed values: {BudgetTypeParser.AllowedValues}");
+                return Result.Fail($"Type must be one of: {BudgetTypeParser.AllowedValues} on the {(i + 1).Ordinalize()} allocation");
         }
 
         var subCategoryIds = subCategoryIndexById.Keys.ToArray();

@@ -48,7 +48,7 @@ public class RetrieveBillsService(DatabaseContext context)
     public async Task<Result<RetrieveBillsOutput>> Handle(RetrieveBillsOptions options, CancellationToken cancellationToken = default)
     {
         if (options.BudgetId <= 0)
-            return Result.Fail("Budget Id is required");
+            return Result.Fail("Budget id is required");
 
         if (options.From is not null && options.To is not null && options.From > options.To)
             return Result.Fail("From must be less than or equal to To");

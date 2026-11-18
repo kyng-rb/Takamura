@@ -68,7 +68,7 @@ A feature is one slice across three layers. Names follow `<Verb><Thing>` with ve
 - `record ...ServiceInput` / `...Input` / `...Options` (with `ToEntity()` when it creates something)
 - `record ...Output` with static `FromEntity` / `FromEntities`
 - `class ...Service(DatabaseContext context)` — primary constructor, `private readonly DatabaseContext _context = context;`, single `public async Task<Result>` or `Task<Result<TOutput>> Handle(input)`.
-- Validation is inline at the top of `Handle`, returning `Result.Fail("message")` (first error becomes the HTTP 400 body). Check existence of referenced rows with `AnyAsync`. Reads use `.AsNoTracking()`. Use `.ConfigureAwait(false)` on awaits.
+- Validation is inline at the top of `Handle`, returning `Result.Fail("message")` (first error becomes the HTTP 400 body). Input checks first, database checks after. Message style, no trailing period: `X is required`, `X must be ...`, `X does not exist`; inside a list add `on the 2nd allocation`. Check existence of referenced rows with `AnyAsync`. Reads use `.AsNoTracking()`. Use `.ConfigureAwait(false)` on awaits.
 - Register in `Takamura.Application/DependencyInjection.cs` (`AddScoped`).
 
 **API** — `Endpoints/<Group>/<Action>/<Action>Endpoint.cs` (+ `<Action>Request.cs` record with `ToServiceInput(routeId)`):

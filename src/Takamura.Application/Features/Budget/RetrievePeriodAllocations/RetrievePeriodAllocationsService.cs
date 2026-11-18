@@ -48,19 +48,19 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
     public async Task<Result<RetrievePeriodAllocationsOutput>> Handle(RetrievePeriodAllocationInput input, CancellationToken cancellationToken = default)
     {
         if (input.BudgetId <= 0)
-            return Result.Fail("Invalid budget id");
+            return Result.Fail("Budget id is required");
 
         if (input.Year.HasValue && (input.Year < FieldLimits.MinYear || input.Year > FieldLimits.MaxYear))
             return Result.Fail($"Year must be between {FieldLimits.MinYear} and {FieldLimits.MaxYear}");
 
         if (input.Month.HasValue && (input.Month < 1 || input.Month > 12))
-            return Result.Fail("Invalid month");
+            return Result.Fail("Month must be between 1 and 12");
 
         BudgetType? typeFilter = null;
         if (!string.IsNullOrWhiteSpace(input.Type))
         {
             if (!BudgetTypeParser.TryParse(input.Type, out var budgetType))
-                return Result.Fail($"Invalid type. Allowed values: {BudgetTypeParser.AllowedValues}");
+                return Result.Fail($"Type must be one of: {BudgetTypeParser.AllowedValues}");
 
             typeFilter = budgetType;
         }
