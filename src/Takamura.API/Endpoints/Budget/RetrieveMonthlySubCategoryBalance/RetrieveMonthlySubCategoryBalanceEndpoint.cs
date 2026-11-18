@@ -10,6 +10,7 @@ public static class RetrieveMonthlySubCategoryBalanceEndpoint
     {
         group.MapGet("/{id:int}/allocation/subcategorybalance", async ([FromRoute] int id, [AsParameters] RetrieveMonthlySubCategoryBalanceRequest input, [FromServices] RetrieveMonthlySubCategoryBalanceService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp())
-            .Produces<RetrieveMonthlySubCategoryBalanceOutput>();
+            .Produces<RetrieveMonthlySubCategoryBalanceOutput>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

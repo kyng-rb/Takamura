@@ -9,6 +9,7 @@ public static class AttachSubCategoryEndpoint
     {
         group.MapPost("/{id}", async (AttachSubCategoryService service, int id, AttachSubCategoryRequest input)
             => await service.Handle(input.ToServiceInput(id)).ToCreated())
-            .Produces<AttachSubCategoryOutput>(StatusCodes.Status201Created);
+            .Produces<AttachSubCategoryOutput>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }
