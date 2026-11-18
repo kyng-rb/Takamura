@@ -21,11 +21,13 @@ public record CreateCategoryServiceInput(string Description, IEnumerable<CreateS
     }
 }
 
+public record CreateCategoryOutput(int Id);
+
 public class CreateCategoryService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result> Handle(CreateCategoryServiceInput input)
+    public async Task<Result<CreateCategoryOutput>> Handle(CreateCategoryServiceInput input)
     {
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Entry description cannot be empty.");
@@ -43,6 +45,6 @@ public class CreateCategoryService(DatabaseContext context)
 
         _context.Categories.Add(category);
         _ = await _context.SaveChangesAsync().ConfigureAwait(false);
-        return Result.Ok();
+        return Result.Ok(new CreateCategoryOutput(category.Id));
     }
 }

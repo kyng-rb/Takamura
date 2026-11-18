@@ -9,7 +9,7 @@ public static class CreateBillEndpoint
     public static void Map(RouteGroupBuilder group)
     {
         group.MapPost("/{id}/bill", async ([FromRoute] int id, [FromBody] CreateBillRequest input, [FromServices] CreateBillService service)
-            => await service.Handle(input.ToServiceInput(id)).ToHttp())
-            .Produces(StatusCodes.Status204NoContent);
+            => await service.Handle(input.ToServiceInput(id)).ToCreated())
+            .Produces<CreateBillOutput>(StatusCodes.Status201Created);
     }
 }

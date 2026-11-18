@@ -46,11 +46,13 @@ public record CreateBudgetPeriodAllocationInput(
     public BudgetType ToBudgetType() => Type.DehumanizeTo<BudgetType>();
 }
 
+public record CreateBudgetOutput(int Id);
+
 public class CreateBudgetService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result> Handle(CreateBudgetServiceInput input)
+    public async Task<Result<CreateBudgetOutput>> Handle(CreateBudgetServiceInput input)
     {
         if (string.IsNullOrWhiteSpace(input.Title))
             return Result.Fail("Title is required");
@@ -66,7 +68,7 @@ public class CreateBudgetService(DatabaseContext context)
         _context.Add(entity);
         _ = await _context.SaveChangesAsync().ConfigureAwait(false);
 
-        return Result.Ok();
+        return Result.Ok(new CreateBudgetOutput(entity.Id));
     }
 
     private async Task<Result> ValidateBudgetPeriods(CreateBudgetServiceInput input)

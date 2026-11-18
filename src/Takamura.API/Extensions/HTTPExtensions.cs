@@ -26,4 +26,15 @@ public static class HttpExtensions
 
         return Results.BadRequest(ErrorMessage(serviceResult.Errors));
     }
+
+    /// <summary><c>Result&lt;T&gt;</c> from a create service: 201 Created with the body (e.g. <c>{ "id": 1 }</c>) or 400.</summary>
+    public static async Task<IResult> ToCreated<T>(this Task<Result<T>> task)
+    {
+        var serviceResult = await task;
+
+        if (serviceResult.IsSuccess)
+            return Results.Created((string?)null, serviceResult.Value);
+
+        return Results.BadRequest(ErrorMessage(serviceResult.Errors));
+    }
 }

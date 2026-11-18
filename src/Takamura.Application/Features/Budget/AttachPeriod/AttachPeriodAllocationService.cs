@@ -19,11 +19,13 @@ public record AttachPeriodAllocationServiceInput(
      => PeriodAllocationEntity.Create(BudgetId, Description, SubCategoryId, Month, Year, Amount, type);
 }
 
+public record AttachPeriodAllocationOutput(int Id);
+
 public class AttachPeriodAllocationService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result> Handle(AttachPeriodAllocationServiceInput input)
+    public async Task<Result<AttachPeriodAllocationOutput>> Handle(AttachPeriodAllocationServiceInput input)
     {
         if (input.BudgetId <= 0)
             return Result.Fail("Budget id is required");
@@ -63,7 +65,7 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         _context.Add(periodBudget);
         _ = await _context.SaveChangesAsync().ConfigureAwait(false);
 
-        return Result.Ok();
+        return Result.Ok(new AttachPeriodAllocationOutput(periodBudget.Id));
     }
 
     private static bool TryParseBudgetType(string value, out BudgetType type)
