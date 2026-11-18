@@ -13,10 +13,7 @@ public record CreateCategoryServiceInput(string Description, IEnumerable<CreateS
     {
         var category = CategoryEntity.Create(Description);
 
-        if (SubCategories?.Any() == true)
-        {
-            category.AttachSubCategories(SubCategories.Select(x => x.Description));
-        }
+        category.AttachSubCategories(SubCategories.Select(x => x.Description));
 
         return category;
     }
@@ -36,13 +33,13 @@ public class CreateCategoryService(DatabaseContext context)
         if (input.Description.Length > FieldLimits.TextMaxLength)
             return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters");
 
-        if (input.SubCategories?.Any(x => string.IsNullOrWhiteSpace(x.Description)) == true)
+        if (input.SubCategories.Any(x => string.IsNullOrWhiteSpace(x.Description)))
             return Result.Fail("SubCategory description is required");
 
-        if (input.SubCategories?.Any(x => x.Description.Length > FieldLimits.TextMaxLength) == true)
+        if (input.SubCategories.Any(x => x.Description.Length > FieldLimits.TextMaxLength))
             return Result.Fail($"SubCategory description must be at most {FieldLimits.TextMaxLength} characters");
 
-        var subCategoryNames = input.SubCategories?.Select(x => x.Description.Trim()).ToArray() ?? [];
+        var subCategoryNames = input.SubCategories.Select(x => x.Description.Trim()).ToArray();
         if (subCategoryNames.Distinct(StringComparer.OrdinalIgnoreCase).Count() != subCategoryNames.Length)
             return Result.Fail("SubCategory descriptions must be unique");
 
