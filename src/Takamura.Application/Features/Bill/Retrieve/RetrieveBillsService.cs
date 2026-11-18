@@ -45,7 +45,7 @@ public class RetrieveBillsService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<RetrieveBillsOutput>> Handle(RetrieveBillsOptions options)
+    public async Task<Result<RetrieveBillsOutput>> Handle(RetrieveBillsOptions options, CancellationToken cancellationToken = default)
     {
         if (options.BudgetId <= 0)
             return Result.Fail("Budget Id is required");
@@ -53,21 +53,21 @@ public class RetrieveBillsService(DatabaseContext context)
         if (options.From is not null && options.To is not null && options.From > options.To)
             return Result.Fail("From must be less than or equal to To");
 
-        if (!await _context.Budgets.AnyAsync(budget => budget.Id == options.BudgetId).ConfigureAwait(false))
+        if (!await _context.Budgets.AnyAsync(budget => budget.Id == options.BudgetId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("Budget does not exist");
 
-        if (options.CategoryId is not null && !await _context.Categories.AnyAsync(category => category.Id == options.CategoryId).ConfigureAwait(false))
+        if (options.CategoryId is not null && !await _context.Categories.AnyAsync(category => category.Id == options.CategoryId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("Category does not exist");
 
-        if (options.SubCategoryId is not null && !await _context.SubCategories.AnyAsync(subcategory => subcategory.Id == options.SubCategoryId).ConfigureAwait(false))
+        if (options.SubCategoryId is not null && !await _context.SubCategories.AnyAsync(subcategory => subcategory.Id == options.SubCategoryId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("SubCategory does not exist");
 
-        var bills = await GetRecords(options).ConfigureAwait(false);
+        var bills = await GetRecords(options, cancellationToken).ConfigureAwait(false);
 
         return Result.Ok(RetrieveBillsOutput.FromEntities(bills));
     }
 
-    private async Task<List<BillEntity>> GetRecords(RetrieveBillsOptions options)
+    private async Task<List<BillEntity>> GetRecords(RetrieveBillsOptions options, CancellationToken cancellationToken)
     {
         var query = _context.Bills
                     .Where(bill => bill.BudgetId == options.BudgetId);
@@ -90,6 +90,6 @@ public class RetrieveBillsService(DatabaseContext context)
 
         return await query
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

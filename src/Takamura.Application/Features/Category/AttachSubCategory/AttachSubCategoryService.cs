@@ -12,7 +12,7 @@ public class AttachSubCategoryService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<AttachSubCategoryOutput>> Handle(AttachSubCategoryServiceInput input)
+    public async Task<Result<AttachSubCategoryOutput>> Handle(AttachSubCategoryServiceInput input, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Entry description cannot be empty.");
@@ -20,16 +20,16 @@ public class AttachSubCategoryService(DatabaseContext context)
         if (input.Description.Length > FieldLimits.TextMaxLength)
             return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters.");
 
-        var category = await _context.Categories.FindAsync(input.CategoryId).ConfigureAwait(false);
+        var category = await _context.Categories.FindAsync([input.CategoryId], cancellationToken).ConfigureAwait(false);
         if (category is null)
             return Result.Fail("Category not found.");
 
-        if (await _context.SubCategories.AnyAsync(x => x.CategoryId == input.CategoryId && x.Description == input.Description).ConfigureAwait(false))
+        if (await _context.SubCategories.AnyAsync(x => x.CategoryId == input.CategoryId && x.Description == input.Description, cancellationToken).ConfigureAwait(false))
             return Result.Fail("This category already has a subcategory with this description.");
 
         var subCategory = category.AttachSubCategory(input.Description);
         _context.Categories.Update(category);
-        _ = await _context.SaveChangesAsync().ConfigureAwait(false);
+        _ = await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         return Result.Ok(new AttachSubCategoryOutput(subCategory.Id));
     }
 }

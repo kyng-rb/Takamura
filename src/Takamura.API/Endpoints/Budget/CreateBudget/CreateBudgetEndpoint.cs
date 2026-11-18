@@ -8,8 +8,8 @@ public static class CreateBudgetEndpoint
 {
     public static void Map(RouteGroupBuilder group)
     {
-        group.MapPost("/", async ([FromBody] CreateBudgetServiceInput input, [FromServices] CreateBudgetService service)
-            => await service.Handle(input).ToCreated())
+        group.MapPost("/", async ([FromBody] CreateBudgetServiceInput input, [FromServices] CreateBudgetService service, CancellationToken cancellationToken)
+            => await service.Handle(input, cancellationToken).ToCreated())
             .Produces<CreateBudgetOutput>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest);
     }

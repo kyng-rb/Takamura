@@ -17,7 +17,7 @@ public class CreateBillService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<CreateBillOutput>> Handle(CreateBillServiceInput input)
+    public async Task<Result<CreateBillOutput>> Handle(CreateBillServiceInput input, CancellationToken cancellationToken = default)
     {
         // A missing "date" in the JSON binds to DateOnly's default (0001-01-01).
         if (input.Date == default)
@@ -44,16 +44,16 @@ public class CreateBillService(DatabaseContext context)
         if (input.BudgetId <= 0)
             return Result.Fail("BudgetId is required");
 
-        if (!await _context.SubCategories.AnyAsync(x => x.Id == input.SubCategoryId).ConfigureAwait(false))
+        if (!await _context.SubCategories.AnyAsync(x => x.Id == input.SubCategoryId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("SubCategory does not exist");
 
-        if (!await _context.Budgets.AnyAsync(x => x.Id == input.BudgetId).ConfigureAwait(false))
+        if (!await _context.Budgets.AnyAsync(x => x.Id == input.BudgetId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("Budget does not exist");
 
         var entity = input.ToEntity();
 
         _context.Add(entity);
-        _ = await _context.SaveChangesAsync().ConfigureAwait(false);
+        _ = await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         return Result.Ok(new CreateBillOutput(entity.Id));
     }
 }

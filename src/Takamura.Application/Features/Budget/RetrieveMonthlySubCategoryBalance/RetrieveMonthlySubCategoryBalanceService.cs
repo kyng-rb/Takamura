@@ -37,7 +37,7 @@ public class RetrieveMonthlySubCategoryBalanceService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<RetrieveMonthlySubCategoryBalanceOutput>> Handle(RetrieveMonthlySubCategoryBalanceInput input)
+    public async Task<Result<RetrieveMonthlySubCategoryBalanceOutput>> Handle(RetrieveMonthlySubCategoryBalanceInput input, CancellationToken cancellationToken = default)
     {
         if (input.BudgetId <= 0)
             return Result.Fail("Invalid budget id");
@@ -49,7 +49,7 @@ public class RetrieveMonthlySubCategoryBalanceService(DatabaseContext context)
             return Result.Fail("Invalid month");
 
         var exists = await _context.Budgets
-            .AnyAsync(x => x.Id == input.BudgetId)
+            .AnyAsync(x => x.Id == input.BudgetId, cancellationToken)
             .ConfigureAwait(false);
         if (!exists)
             return Result.Fail("Budget does not exist");
@@ -61,7 +61,7 @@ public class RetrieveMonthlySubCategoryBalanceService(DatabaseContext context)
             .ThenBy(x => x.Category)
             .ThenBy(x => x.SubCategory)
             .AsNoTracking()
-            .ToListAsync()
+            .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
         return Result.Ok(RetrieveMonthlySubCategoryBalanceOutput.FromEntities(records));

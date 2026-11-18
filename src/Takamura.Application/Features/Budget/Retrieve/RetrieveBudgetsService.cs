@@ -21,11 +21,11 @@ public class RetrieveBudgetsService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result<RetrieveBudgetsOutput>> Handle()
+    public async Task<Result<RetrieveBudgetsOutput>> Handle(CancellationToken cancellationToken = default)
     {
         var budgets = await _context.Budgets
             .AsNoTracking()
-            .ToListAsync()
+            .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
         return Result.Ok(RetrieveBudgetsOutput.FromEntities(budgets));
