@@ -66,3 +66,6 @@ src/Takamura.Web/appsettings.Development.json
 
 # Claude Code (personal settings stay local; .claude/settings.json and skills are shared)
 .claude/settings.local.json
+
+# Personal editor settings (spell-check words etc.)
+.vscode/settings.json

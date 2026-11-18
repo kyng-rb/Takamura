@@ -2,6 +2,8 @@
 
 Personal finance manager focused on **budgeting**. One user (the owner), amounts in USD, category names in Spanish (e.g. "Hipoteca", "Gasolina", "Ahorro").
 
+Product vision: `README.md` (zero-based budgeting with rollover and sinking funds). Read it before changing how budgets, balances or allocations behave.
+
 ## Solution layout
 
 ```
@@ -10,7 +12,7 @@ src/
   Takamura.API/                # ASP.NET Core 9 Minimal API (REST, OpenAPI + Scalar docs)
   Takamura.Application/        # Business logic + EF Core (SQL Server). Referenced by API.
   Takamura.Web/                # Blazor Web App (Interactive Server) + MudBlazor. Talks to the API over HTTP (RestSharp). No project reference to Application.
-.github/workflows/             # Push to `develop` deploys API -> Azure App Service "TakamuraAPI", Web -> "TakamuraWeb"
+.github/workflows/             # Push to `develop` deploys the API and the Web app to Azure App Service
 ```
 
 Stack: .NET 9, C# with `Nullable` + `ImplicitUsings`, EF Core 9 SqlServer, FluentResults, Humanizer, MudBlazor 8, RestSharp 113.
@@ -84,7 +86,7 @@ Routes: `/` budgets, `/categories`, `/budgets/{id}/bills`, `/budgets/{id}/alloca
 1. `BillsRetrieveService` (Web) sends `Category`/`Subcategory` **names** as query params; the API expects `CategoryId`/`SubCategoryId` ints, so those filters are silently ignored.
 2. Balances page: Year-To-Date always sums up to `DateTime.Today.Month`, even for past years (should be 12 for past years).
 3. The keyless `MonthlySubCategoryBalanceEntity` made the Initial migration create an empty table `MonthlySubCategoryBalanceEntity`; should be mapped with `.ToView(null)` / function only. The TVF itself is not versioned.
-4. `TryParseBudgetType` is duplicated in three services; `HttpsRedirection` + no auth on the API (anyone with the URL can read/write).
+4. `TryParseBudgetType` is duplicated in three services.
 5. No tests, no update/delete endpoints yet (entities already have `Update()`/`Delete()` soft-delete helpers; queries don't filter `Status == Deleted`).
 
 ## Working agreements for Claude
