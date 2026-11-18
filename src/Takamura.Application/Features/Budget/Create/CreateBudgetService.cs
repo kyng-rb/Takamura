@@ -60,6 +60,9 @@ public class CreateBudgetService(DatabaseContext context)
         if (input.Title.Length > FieldLimits.TextMaxLength)
             return Result.Fail($"Title must be at most {FieldLimits.TextMaxLength} characters");
 
+        if (await _context.Budgets.AnyAsync(x => x.Title == input.Title).ConfigureAwait(false))
+            return Result.Fail("A budget with this title already exists");
+
         var validationResult = await ValidateBudgetPeriods(input).ConfigureAwait(false);
         if (validationResult.IsFailed)
             return Result.Fail(validationResult.Errors);
@@ -77,6 +80,7 @@ public class CreateBudgetService(DatabaseContext context)
             return Result.Ok();
 
         var subCategoryIndexById = new Dictionary<int, int>();
+        var periods = new HashSet<(int SubCategoryId, int Year, int Month)>();
 
         for (var i = 0; i < input.Allocations.Length; i++)
         {
@@ -102,6 +106,9 @@ public class CreateBudgetService(DatabaseContext context)
 
             if (allocation.SubCategoryId <= 0)
                 return Result.Fail($"SubCategory id is required on the {(i + 1).Ordinalize()} allocation");
+
+            if (!periods.Add((allocation.SubCategoryId, allocation.YearFrom, allocation.MonthFrom)))
+                return Result.Fail($"The {(i + 1).Ordinalize()} allocation repeats a subcategory and month already used by another allocation");
 
             if (!subCategoryIndexById.ContainsKey(allocation.SubCategoryId))
                 subCategoryIndexById[allocation.SubCategoryId] = i;

@@ -64,6 +64,15 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         if (!TryParseBudgetType(input.Type, out var budgetType))
             return Result.Fail("Invalid type. Allowed values: Income, Outcome, Saving");
 
+        var alreadyAllocated = await _context.PeriodAllocations
+            .AnyAsync(x => x.BudgetId == input.BudgetId
+                && x.SubCategoryId == input.SubCategoryId
+                && x.YearFrom == input.Year
+                && x.MonthFrom == input.Month)
+            .ConfigureAwait(false);
+        if (alreadyAllocated)
+            return Result.Fail("This subcategory already has an allocation for that month");
+
         var periodBudget = input.ToEntity(budgetType);
         _context.Add(periodBudget);
         _ = await _context.SaveChangesAsync().ConfigureAwait(false);

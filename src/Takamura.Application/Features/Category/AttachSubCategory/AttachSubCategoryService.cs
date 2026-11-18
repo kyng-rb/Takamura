@@ -1,4 +1,5 @@
 using FluentResults;
+using Microsoft.EntityFrameworkCore;
 using Takamura.Application.Database;
 
 namespace Takamura.Application.Features.Category.AttachSubCategory;
@@ -22,6 +23,9 @@ public class AttachSubCategoryService(DatabaseContext context)
         var category = await _context.Categories.FindAsync(input.CategoryId).ConfigureAwait(false);
         if (category is null)
             return Result.Fail("Category not found.");
+
+        if (await _context.SubCategories.AnyAsync(x => x.CategoryId == input.CategoryId && x.Description == input.Description).ConfigureAwait(false))
+            return Result.Fail("This category already has a subcategory with this description.");
 
         var subCategory = category.AttachSubCategory(input.Description);
         _context.Categories.Update(category);

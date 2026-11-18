@@ -1,4 +1,5 @@
 using FluentResults;
+using Microsoft.EntityFrameworkCore;
 using Takamura.Application.Database;
 using Takamura.Application.Database.Entities.Category;
 
@@ -40,6 +41,13 @@ public class CreateCategoryService(DatabaseContext context)
 
         if (input.SubCategories?.Any(x => x.Description.Length > FieldLimits.TextMaxLength) == true)
             return Result.Fail($"SubCategory description must be at most {FieldLimits.TextMaxLength} characters.");
+
+        var subCategoryNames = input.SubCategories?.Select(x => x.Description.Trim()).ToArray() ?? [];
+        if (subCategoryNames.Distinct(StringComparer.OrdinalIgnoreCase).Count() != subCategoryNames.Length)
+            return Result.Fail("SubCategory descriptions must be unique.");
+
+        if (await _context.Categories.AnyAsync(x => x.Description == input.Description).ConfigureAwait(false))
+            return Result.Fail("A category with this description already exists.");
 
         var category = input.ToEntity();
 
