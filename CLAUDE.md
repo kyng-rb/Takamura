@@ -58,7 +58,7 @@ dotnet ef database update --project src/Takamura.Application   # applies migrati
 
 All entities inherit `EntityBase` (`Id`, `Status` Created/Updated/Deleted, `CreatedAt`, `LastUpdateAt`, all UTC). Entities are created through static `Create(...)` factories that set `Id = 0`, `CreatedAt = DateTime.UtcNow`, `Status = Created`.
 
-DB conventions (DatabaseContext.ConfigureConventions): `decimal` → `decimal(18,2)`, `string` → `varchar(100)`, enums stored as strings `varchar(20)`, `DateTime` → `datetime`. Table names via `[Table("Singular")]`.
+DB conventions (DatabaseContext.ConfigureConventions): `decimal` → `decimal(18,2)`, `string` → `varchar(100)`, enums stored as strings `varchar(20)`, `DateTime` → `datetime2`, always UTC (`UtcDateTimeConverter` marks values read back as `DateTimeKind.Utc`). Table names via `[Table("Singular")]`.
 
 ## Architecture: vertical slices
 

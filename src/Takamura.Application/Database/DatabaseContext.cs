@@ -65,7 +65,8 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             .HaveColumnType($"varchar({FieldLimits.EnumMaxLength})");
 
         configurationBuilder.Properties<DateTime>()
-            .HaveColumnType("datetime");
+            .HaveColumnType("datetime2")
+            .HaveConversion<UtcDateTimeConverter>();
 
         base.ConfigureConventions(configurationBuilder);
     }
