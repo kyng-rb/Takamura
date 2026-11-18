@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Takamura.Application.Database;
 using Takamura.Application.Features.Bill.Create;
 using Takamura.Application.Features.Bill.Retrieve;
@@ -39,14 +38,12 @@ public static class DependencyInjection
         services.AddDbContext<DatabaseContext>(
             options =>
             {
-                options.UseSqlServer(connectionString,
-                    sqlOptions => sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null));
+                options.UseTakamuraSqlServer(connectionString);
 
                 if (isDevelopment)
                 {
                     options.EnableSensitiveDataLogging();
                     options.EnableDetailedErrors();
-                    options.LogTo(Console.WriteLine, LogLevel.Information);
                 }
             });
 
