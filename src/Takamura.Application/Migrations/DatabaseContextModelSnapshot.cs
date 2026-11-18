@@ -161,7 +161,7 @@ namespace Takamura.Application.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodAllocationEntity", b =>
+            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodAllocation.PeriodAllocationEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -266,10 +266,10 @@ namespace Takamura.Application.Migrations
                     b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodBudget.PeriodAllocationEntity", b =>
+            modelBuilder.Entity("Takamura.Application.Database.Entities.PeriodAllocation.PeriodAllocationEntity", b =>
                 {
                     b.HasOne("Takamura.Application.Database.Entities.Budget.BudgetEntity", "Budget")
-                        .WithMany("PeriodBudgets")
+                        .WithMany("PeriodAllocations")
                         .HasForeignKey("BudgetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -298,7 +298,7 @@ namespace Takamura.Application.Migrations
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.Budget.BudgetEntity", b =>
                 {
-                    b.Navigation("PeriodBudgets");
+                    b.Navigation("PeriodAllocations");
                 });
 
             modelBuilder.Entity("Takamura.Application.Database.Entities.Category.CategoryEntity", b =>

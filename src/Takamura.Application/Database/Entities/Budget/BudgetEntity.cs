@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Takamura.Application.Database.Entities.Base;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 
 namespace Takamura.Application.Database.Entities.Budget;
 
@@ -9,7 +9,7 @@ public class BudgetEntity : EntityBase
 {
     public required string Title { get; set; }
 
-    public List<PeriodAllocationEntity> PeriodBudgets { get; set; } = [];
+    public List<PeriodAllocationEntity> PeriodAllocations { get; set; } = [];
 
     public static BudgetEntity Create(string title)
     {
@@ -22,8 +22,8 @@ public class BudgetEntity : EntityBase
         };
     }
 
-    public void AddPeriodBudget(PeriodAllocationEntity periodBudget)
+    public void AddPeriodAllocation(PeriodAllocationEntity allocation)
     {
-        PeriodBudgets.Add(periodBudget);
+        PeriodAllocations.Add(allocation);
     }
 }

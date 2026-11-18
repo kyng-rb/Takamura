@@ -6,7 +6,7 @@ using Takamura.Application.Database.Entities.Balance;
 using Takamura.Application.Database.Entities.Bill;
 using Takamura.Application.Database.Entities.Budget;
 using Takamura.Application.Database.Entities.Category;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 using Takamura.Application.Database.Entities.SubCategory;
 
 namespace Takamura.Application.Database;

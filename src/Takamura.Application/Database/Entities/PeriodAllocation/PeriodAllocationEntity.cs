@@ -3,7 +3,7 @@ using Takamura.Application.Database.Entities.Base;
 using Takamura.Application.Database.Entities.Budget;
 using Takamura.Application.Database.Entities.SubCategory;
 
-namespace Takamura.Application.Database.Entities.PeriodBudget;
+namespace Takamura.Application.Database.Entities.PeriodAllocation;
 
 [Table("PeriodAllocation")]
 public class PeriodAllocationEntity : EntityBase
@@ -28,7 +28,7 @@ public class PeriodAllocationEntity : EntityBase
 
     public static PeriodAllocationEntity Create(
         int budgetId,
-        string budgetDescription,
+        string description,
         int subCategoryId,
         int month,
         int year,
@@ -38,7 +38,7 @@ public class PeriodAllocationEntity : EntityBase
         return new PeriodAllocationEntity
         {
             Id = 0,
-            Description = budgetDescription,
+            Description = description,
             BudgetId = budgetId,
             SubCategoryId = subCategoryId,
             MonthFrom = month,

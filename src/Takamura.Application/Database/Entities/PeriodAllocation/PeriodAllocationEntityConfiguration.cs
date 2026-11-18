@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Takamura.Application.Database.Entities.PeriodBudget;
+namespace Takamura.Application.Database.Entities.PeriodAllocation;
 
 public class PeriodAllocationEntityConfiguration : IEntityTypeConfiguration<PeriodAllocationEntity>
 {

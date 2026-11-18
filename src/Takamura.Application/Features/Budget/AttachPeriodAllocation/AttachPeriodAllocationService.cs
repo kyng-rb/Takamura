@@ -1,9 +1,9 @@
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using Takamura.Application.Database;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 
-namespace Takamura.Application.Features.Budget.AttachPeriod;
+namespace Takamura.Application.Features.Budget.AttachPeriodAllocation;
 
 public record AttachPeriodAllocationServiceInput(
     int BudgetId,
@@ -72,10 +72,10 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         if (alreadyAllocated)
             return Result.Fail("This subcategory already has an allocation for that month");
 
-        var periodBudget = input.ToEntity(budgetType);
-        _context.Add(periodBudget);
+        var allocation = input.ToEntity(budgetType);
+        _context.Add(allocation);
         _ = await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-        return Result.Ok(new AttachPeriodAllocationOutput(periodBudget.Id));
+        return Result.Ok(new AttachPeriodAllocationOutput(allocation.Id));
     }
 }

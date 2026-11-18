@@ -3,7 +3,7 @@ using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Takamura.Application.Database;
 using Takamura.Application.Database.Entities.Budget;
-using Takamura.Application.Database.Entities.PeriodBudget;
+using Takamura.Application.Database.Entities.PeriodAllocation;
 
 namespace Takamura.Application.Features.Budget.Create;
 
@@ -20,7 +20,7 @@ public record CreateBudgetServiceInput(
 
         foreach (var allocation in Allocations)
         {
-            var periodBudget = PeriodAllocationEntity.Create(
+            var entity = PeriodAllocationEntity.Create(
                 budget.Id,
                 allocation.Description,
                 allocation.SubCategoryId,
@@ -28,7 +28,7 @@ public record CreateBudgetServiceInput(
                 allocation.YearFrom,
                 allocation.Amount,
                 allocation.ToBudgetType());
-            budget.AddPeriodBudget(periodBudget);
+            budget.AddPeriodAllocation(entity);
         }
 
         return budget;

@@ -1,4 +1,4 @@
-using Takamura.Application.Features.Budget.AttachPeriod;
+using Takamura.Application.Features.Budget.AttachPeriodAllocation;
 
 namespace Takamura.API.Endpoints.Budget.AttachPeriodAllocation;
 
