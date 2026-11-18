@@ -22,7 +22,7 @@ public class CategoryRetrieveService
 
     public async Task<CategoryRetrieveOutput> Handle(CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest("api/category");
+        var request = new RestRequest("api/categories");
         var client = _httpFactory.CreateClient(ApiSettings.ApiName);
         var response = await client.ExecuteAsync<CategoryRetrieveOutput>(request, cancellationToken);
         return RestResponseGuard.EnsureSuccessAndData(response, request.Resource);

@@ -18,7 +18,7 @@ public class CategoryAddSubCategoryService
 
     public async Task Handle(CategoryAddSubCategoryInput input, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest($"api/category/{input.CategoryId}", Method.Post);
+        var request = new RestRequest($"api/categories/{input.CategoryId}/subcategories", Method.Post);
         request.AddBody(new
         {
             input.Description

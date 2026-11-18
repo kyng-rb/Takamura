@@ -75,7 +75,7 @@ A feature is one slice across three layers. Names follow `<Verb><Thing>` with ve
 - `public static class XEndpoint { public static void Map(RouteGroupBuilder group) { group.MapGet/MapPost(..., async (...) => await service.Handle(...).ToHttp()).Produces<...>(); } }`
 - Use `[FromRoute]`, `[FromBody]`, `[AsParameters]` (query), `[FromServices]`.
 - `.ToHttp()` (Extensions/HTTPExtensions.cs): `Result` → 204 / 400, `Result<T>` → 200 / 400; `.ToCreated()` for create services (`Result<XOutput>` with `record XOutput(int Id)`) → 201 `{ "id": n }` / 400; every 400 is RFC 7807 problem details: `detail` = all messages joined, `errors` = the messages as an array. Binding failures and unhandled exceptions return problem details too (`AddProblemDetails` + `UseExceptionHandler`). Endpoints declare `.ProducesProblem(StatusCodes.Status400BadRequest)`.
-- Wire it in the group file (`BudgetEndpointGroup` = `api/budget`, `CategoryEndpointGroup` = `api/category`). Bills and allocations are nested under a budget: `api/budget/{id}/bill`, `api/budget/{id}/allocation`.
+- Wire it in the group file (`BudgetEndpointGroup` = `api/budgets`, `CategoryEndpointGroup` = `api/categories`). Routes are plural nouns with `{id:int}`; children are nested: `api/budgets/{id:int}/bills`, `.../allocations`, `.../balances`, `api/categories/{id:int}/subcategories`.
 
 **Web** — the client mirrors the API with its own DTOs (do not reference Application):
 - `Services/<Area>/<Action>/<Area><Action>Service.cs`: input/output records + a class taking `IRestClientFactory`, `CreateClient(ApiSettings.ApiName)`, then `RestResponseGuard.EnsureSuccess(...)` or `EnsureSuccessAndData(...)`. Register in `Services/DependencyInjection.cs`.

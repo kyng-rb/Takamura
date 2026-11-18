@@ -8,7 +8,7 @@ public static class RetrievePeriodAllocationsEndpoint
 {
     public static void Map(RouteGroupBuilder group)
     {
-        group.MapGet("/{id}/allocation", async ([FromRoute] int id, [AsParameters] RetrievePeriodAllocationRequest input, [FromServices] RetrievePeriodAllocationsService service, CancellationToken cancellationToken)
+        group.MapGet("/{id:int}/allocations", async ([FromRoute] int id, [AsParameters] RetrievePeriodAllocationRequest input, [FromServices] RetrievePeriodAllocationsService service, CancellationToken cancellationToken)
             => await service.Handle(input.ToServiceInput(id), cancellationToken).ToHttp())
             .Produces<RetrievePeriodAllocationsOutput>()
             .ProducesProblem(StatusCodes.Status400BadRequest);

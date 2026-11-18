@@ -8,8 +8,8 @@ namespace Takamura.Web.Services.Bills.Retrieve;
 public record BillsRetrieveServiceInput(
     DateOnly? From = null,
     DateOnly? To = null,
-    string? Category = null,
-    string? SubCategory = null
+    int? CategoryId = null,
+    int? SubCategoryId = null
 );
 
 public record BillsRetrieveItem(
@@ -36,7 +36,7 @@ public class BillsRetrieveService
         BillsRetrieveServiceInput? input = null,
         CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest($"api/budget/{budgetId}/bill");
+        var request = new RestRequest($"api/budgets/{budgetId}/bills");
         if (input is not null)
         {
             if (input.From is not null)
@@ -45,11 +45,11 @@ public class BillsRetrieveService
             if (input.To is not null)
                 request.AddQueryParameter("To", input.To.Value);
 
-            if (input.Category is not null)
-                request.AddQueryParameter("Category", input.Category);
+            if (input.CategoryId is not null)
+                request.AddQueryParameter("CategoryId", input.CategoryId.Value);
 
-            if (input.SubCategory is not null)
-                request.AddQueryParameter("Subcategory", input.SubCategory);
+            if (input.SubCategoryId is not null)
+                request.AddQueryParameter("SubCategoryId", input.SubCategoryId.Value);
         }
 
         var client = _restFactory.CreateClient(ApiSettings.ApiName);

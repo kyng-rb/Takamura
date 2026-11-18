@@ -6,7 +6,7 @@ using RetrieveCategories;
 
 public static class CategoryEndpointGroup
 {
-    private const string Section = "api/category";
+    private const string Section = "api/categories";
 
     public static void Map(WebApplication app)
     {

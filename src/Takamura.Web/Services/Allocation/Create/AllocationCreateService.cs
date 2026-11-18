@@ -25,7 +25,7 @@ public class AllocationCreateService
 
     public async Task Handle(AllocationCreateInput input, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest($"api/budget/{input.BudgetId}/allocation", Method.Post);
+        var request = new RestRequest($"api/budgets/{input.BudgetId}/allocations", Method.Post);
         request.AddBody(new
         {
             input.SubCategoryId,

@@ -22,7 +22,7 @@ public class CategoryCreateService
 
     public async Task Handle(CategoryCreateInput input, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest("api/category", Method.Post);
+        var request = new RestRequest("api/categories", Method.Post);
         request.AddBody(new
         {
             input.Description,

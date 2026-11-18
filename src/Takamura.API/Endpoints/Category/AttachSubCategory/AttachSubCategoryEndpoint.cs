@@ -7,7 +7,7 @@ public static class AttachSubCategoryEndpoint
 {
     public static void Map(RouteGroupBuilder group)
     {
-        group.MapPost("/{id}", async (AttachSubCategoryService service, int id, AttachSubCategoryRequest input, CancellationToken cancellationToken)
+        group.MapPost("/{id:int}/subcategories", async (AttachSubCategoryService service, int id, AttachSubCategoryRequest input, CancellationToken cancellationToken)
             => await service.Handle(input.ToServiceInput(id), cancellationToken).ToCreated())
             .Produces<AttachSubCategoryOutput>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest);
