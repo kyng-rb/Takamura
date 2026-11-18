@@ -86,6 +86,12 @@ public class CreateBudgetService(DatabaseContext context)
             if (allocation.Description.Length > FieldLimits.TextMaxLength)
                 return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters on the {(i + 1).Ordinalize()} allocation");
 
+            if (allocation.MonthFrom is < 1 or > 12)
+                return Result.Fail($"Month must be between 1 and 12 on the {(i + 1).Ordinalize()} allocation");
+
+            if (allocation.YearFrom is < FieldLimits.MinYear or > FieldLimits.MaxYear)
+                return Result.Fail($"Year must be between {FieldLimits.MinYear} and {FieldLimits.MaxYear} on the {(i + 1).Ordinalize()} allocation");
+
             if (allocation.Amount <= 0)
                 return Result.Fail($"Allocation amount must be greater than 0 on the {(i + 1).Ordinalize()} allocation");
 
