@@ -33,11 +33,11 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             .HaveColumnType("decimal(18,2)");
 
         configurationBuilder.Properties<string>()
-            .HaveColumnType("varchar(100)");
+            .HaveColumnType($"varchar({FieldLimits.TextMaxLength})");
 
         configurationBuilder.Properties<Enum>()
             .HaveConversion<string>()
-            .HaveColumnType("varchar(20)");
+            .HaveColumnType($"varchar({FieldLimits.EnumMaxLength})");
 
         configurationBuilder.Properties<DateTime>()
             .HaveColumnType("datetime");

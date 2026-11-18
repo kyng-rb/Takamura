@@ -55,6 +55,9 @@ public class CreateBudgetService(DatabaseContext context)
         if (string.IsNullOrWhiteSpace(input.Title))
             return Result.Fail("Title is required");
 
+        if (input.Title.Length > FieldLimits.TextMaxLength)
+            return Result.Fail($"Title must be at most {FieldLimits.TextMaxLength} characters");
+
         var validationResult = await ValidateBudgetPeriods(input).ConfigureAwait(false);
         if (validationResult.IsFailed)
             return Result.Fail(validationResult.Errors);
@@ -76,6 +79,12 @@ public class CreateBudgetService(DatabaseContext context)
         for (var i = 0; i < input.Allocations.Length; i++)
         {
             var allocation = input.Allocations[i];
+
+            if (string.IsNullOrWhiteSpace(allocation.Description))
+                return Result.Fail($"Description is required on the {(i + 1).Ordinalize()} allocation");
+
+            if (allocation.Description.Length > FieldLimits.TextMaxLength)
+                return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters on the {(i + 1).Ordinalize()} allocation");
 
             if (allocation.Amount <= 0)
                 return Result.Fail($"Allocation amount must be greater than 0 on the {(i + 1).Ordinalize()} allocation");

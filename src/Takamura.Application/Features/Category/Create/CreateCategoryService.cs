@@ -30,8 +30,14 @@ public class CreateCategoryService(DatabaseContext context)
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Entry description cannot be empty.");
 
+        if (input.Description.Length > FieldLimits.TextMaxLength)
+            return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters.");
+
         if (input.SubCategories?.Any(x => string.IsNullOrWhiteSpace(x.Description)) == true)
             return Result.Fail("SubCategory description cannot be empty.");
+
+        if (input.SubCategories?.Any(x => x.Description.Length > FieldLimits.TextMaxLength) == true)
+            return Result.Fail($"SubCategory description must be at most {FieldLimits.TextMaxLength} characters.");
 
         var category = input.ToEntity();
 

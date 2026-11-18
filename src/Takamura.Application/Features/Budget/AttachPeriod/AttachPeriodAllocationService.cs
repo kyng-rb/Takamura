@@ -32,6 +32,12 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         if (budget == null)
             return Result.Fail("Budget does not exist");
 
+        if (string.IsNullOrWhiteSpace(input.Description))
+            return Result.Fail("Description is required");
+
+        if (input.Description.Length > FieldLimits.TextMaxLength)
+            return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters");
+
         if (input.Amount <= 0)
             return Result.Fail("Amount must be greater than 0");
 
