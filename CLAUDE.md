@@ -30,10 +30,23 @@ EF Core migrations (design-time factory reads the env var `TakamuraConnectionStr
 ```bash
 export TakamuraConnectionString="..."   # never commit it
 dotnet ef migrations add <Name> --project src/Takamura.Application
-dotnet ef database update --project src/Takamura.Application   # ASK THE USER FIRST
+dotnet ef database update --project src/Takamura.Application   # ASK THE USER FIRST (unless it targets the local container below)
 ```
 
-There is **no test project** yet. "Verify" currently means: both builds succeed with no new warnings.
+There is **no test project** yet. "Verify" currently means: both builds succeed with no new warnings, plus a smoke test against the local database below when behaviour changed.
+
+### Local database (Docker)
+
+A local SQL Server 2022 container is used for smoke tests and migrations, so nothing touches Azure:
+
+```bash
+colima start --vm-type vz --vz-rosetta              # Apple Silicon: SQL Server is x86-only and needs Rosetta
+docker start takamura-sql                           # created once with mcr.microsoft.com/mssql/server:2022-latest on port 1433
+set -a; . ./.env; set +a                            # .env (gitignored) holds the local SA password and both connection-string env vars
+dotnet ef database update --project src/Takamura.Application   # applies migrations to the LOCAL container only
+```
+
+`.claude/launch.json` has `api-local` / `web-local` configurations that load `.env`, so the API runs against the container instead of the Azure database in `appsettings.Development.json`. The container has mock data only, and `dbo.monthly_sub_category_balance` there is a hand-written stand-in, not the production function (see backlog D1).
 
 ## Domain model (Takamura.Application/Database/Entities)
 
@@ -81,17 +94,13 @@ Routes: `/` budgets, `/categories`, `/budgets/{id}/bills`, `/budgets/{id}/alloca
 - Web needs `API:Host` (empty in appsettings.json; Azure sets `API__Host`). Locally it comes from `src/Takamura.Web/appsettings.Development.json` (gitignored) = `http://localhost:5240`.
 - Deploys happen automatically on push to `develop`. Don't push to `develop`/`master` without the user asking.
 
-## Known issues (found during initial analysis — fix only when asked)
+## Known issues and backlog
 
-1. `BillsRetrieveService` (Web) sends `Category`/`Subcategory` **names** as query params; the API expects `CategoryId`/`SubCategoryId` ints, so those filters are silently ignored.
-2. Balances page: Year-To-Date always sums up to `DateTime.Today.Month`, even for past years (should be 12 for past years).
-3. The keyless `MonthlySubCategoryBalanceEntity` made the Initial migration create an empty table `MonthlySubCategoryBalanceEntity`; should be mapped with `.ToView(null)` / function only. The TVF itself is not versioned.
-4. `TryParseBudgetType` is duplicated in three services.
-5. No tests, no update/delete endpoints yet (entities already have `Update()`/`Delete()` soft-delete helpers; queries don't filter `Status == Deleted`).
+Everything known but not yet scheduled lives in [docs/BACKLOG.md](docs/BACKLOG.md). Fix an entry only when asked, and delete it in the same PR. New findings go there too.
 
 ## Working agreements for Claude
 
 - Follow the slice layout above exactly; put a new feature in all three layers when it is user-facing.
 - After changes, run both builds. If `dotnet` isn't available, say so instead of claiming it compiles.
-- Don't edit files under `Migrations/` by hand; generate them with `dotnet ef`. Never run `database update` without explicit approval.
+- Don't edit files under `Migrations/` by hand; generate them with `dotnet ef`. Never run `database update` against Azure without explicit approval; the local container is fine.
 - Keep commits small, imperative, English ("Added X" is the existing style).
