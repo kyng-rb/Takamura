@@ -15,9 +15,6 @@ public record CreateBudgetServiceInput(
     {
         var budget = BudgetEntity.Create(Title);
 
-        if (Allocations is null || Allocations.Length == 0)
-            return budget;
-
         foreach (var allocation in Allocations)
         {
             var entity = PeriodAllocationEntity.Create(
@@ -76,7 +73,7 @@ public class CreateBudgetService(DatabaseContext context)
 
     private async Task<Result> ValidateBudgetPeriods(CreateBudgetServiceInput input, CancellationToken cancellationToken)
     {
-        if (input.Allocations is null || input.Allocations.Length == 0)
+        if (input.Allocations.Length == 0)
             return Result.Ok();
 
         var subCategoryIndexById = new Dictionary<int, int>();
