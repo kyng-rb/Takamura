@@ -33,7 +33,7 @@ dotnet ef migrations add <Name> --project src/Takamura.Application
 dotnet ef database update --project src/Takamura.Application   # ASK THE USER FIRST (unless it targets the local container below)
 ```
 
-There is **no test project** yet. "Verify" currently means: both builds succeed with no new warnings, plus a smoke test against the local database below when behaviour changed.
+There is **no test project** yet. "Verify" currently means: both builds succeed with no new warnings (for API and Application, `src/Directory.Build.props` turns warnings into errors and enables the `latest-recommended` analyzers; Web is excluded), plus a smoke test against the local database below when behaviour changed.
 
 ### Local database (Docker)
 

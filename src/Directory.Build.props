@@ -1,0 +1,11 @@
+<Project>
+  <!--
+    Build rules for the API and Application projects. Takamura.Web is deliberately excluded for now.
+    Warnings fail the build, and the recommended .NET analyzers (CA rules) are on.
+  -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Takamura.API' Or '$(MSBuildProjectName)' == 'Takamura.Application'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+  </PropertyGroup>
+</Project>
