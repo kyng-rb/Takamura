@@ -26,12 +26,9 @@ public class AttachPeriodAllocationService(DatabaseContext context)
 
     public async Task<Result<AttachPeriodAllocationOutput>> Handle(AttachPeriodAllocationServiceInput input, CancellationToken cancellationToken = default)
     {
+        // Input checks first (no database access), then existence checks.
         if (input.BudgetId <= 0)
             return Result.Fail("Budget id is required");
-
-        var budget = await _context.Budgets.FirstOrDefaultAsync(b => b.Id == input.BudgetId, cancellationToken).ConfigureAwait(false);
-        if (budget == null)
-            return Result.Fail("Budget does not exist");
 
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Description is required");
@@ -54,14 +51,17 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         if (input.SubCategoryId <= 0)
             return Result.Fail("SubCategory id is required");
 
-        if (!await _context.SubCategories.AnyAsync(s => s.Id == input.SubCategoryId, cancellationToken).ConfigureAwait(false))
-            return Result.Fail("SubCategory does not exist");
-
         if (string.IsNullOrWhiteSpace(input.Type))
             return Result.Fail("Type is required");
 
         if (!BudgetTypeParser.TryParse(input.Type, out var budgetType))
             return Result.Fail($"Invalid type. Allowed values: {BudgetTypeParser.AllowedValues}");
+
+        if (!await _context.Budgets.AnyAsync(b => b.Id == input.BudgetId, cancellationToken).ConfigureAwait(false))
+            return Result.Fail("Budget does not exist");
+
+        if (!await _context.SubCategories.AnyAsync(s => s.Id == input.SubCategoryId, cancellationToken).ConfigureAwait(false))
+            return Result.Fail("SubCategory does not exist");
 
         var alreadyAllocated = await _context.PeriodAllocations
             .AnyAsync(x => x.BudgetId == input.BudgetId
