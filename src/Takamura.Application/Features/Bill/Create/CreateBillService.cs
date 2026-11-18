@@ -19,6 +19,13 @@ public class CreateBillService(DatabaseContext context)
 
     public async Task<Result<CreateBillOutput>> Handle(CreateBillServiceInput input)
     {
+        // A missing "date" in the JSON binds to DateOnly's default (0001-01-01).
+        if (input.Date == default)
+            return Result.Fail("Date is required");
+
+        if (input.Date.Year is < FieldLimits.MinYear or > FieldLimits.MaxYear)
+            return Result.Fail($"Date must be between {FieldLimits.MinYear} and {FieldLimits.MaxYear}");
+
         if (input.Amount <= 0)
             return Result.Fail("Amount must be greater than 0");
 
