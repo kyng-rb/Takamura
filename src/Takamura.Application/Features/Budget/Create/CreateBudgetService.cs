@@ -43,7 +43,7 @@ public record CreateBudgetPeriodAllocationInput(
     decimal Amount,
     string Type)
 {
-    public BudgetType ToBudgetType() => Type.DehumanizeTo<BudgetType>();
+    public BudgetType ToBudgetType() => BudgetTypeParser.Parse(Type);
 }
 
 public record CreateBudgetOutput(int Id);
@@ -116,8 +116,8 @@ public class CreateBudgetService(DatabaseContext context)
             if (string.IsNullOrWhiteSpace(allocation.Type))
                 return Result.Fail($"Type is required on the {(i + 1).Ordinalize()} allocation");
 
-            if (!TryParseBudgetType(allocation.Type, out _))
-                return Result.Fail($"Invalid type on the {(i + 1).Ordinalize()} allocation. Allowed values: Income, Outcome, Saving");
+            if (!BudgetTypeParser.TryParse(allocation.Type, out _))
+                return Result.Fail($"Invalid type on the {(i + 1).Ordinalize()} allocation. Allowed values: {BudgetTypeParser.AllowedValues}");
         }
 
         var subCategoryIds = subCategoryIndexById.Keys.ToArray();
@@ -135,19 +135,5 @@ public class CreateBudgetService(DatabaseContext context)
         }
 
         return Result.Ok();
-    }
-
-    private static bool TryParseBudgetType(string value, out BudgetType type)
-    {
-        try
-        {
-            type = value.DehumanizeTo<BudgetType>();
-            return true;
-        }
-        catch
-        {
-            type = default;
-            return false;
-        }
     }
 }

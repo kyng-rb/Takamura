@@ -17,7 +17,6 @@ Severity: **High** = data at risk or wrong numbers, **Medium** = wrong behaviour
 | # | Severity | Item |
 |---|----------|------|
 | B2 | Medium | Balances page: year-to-date always sums up to `DateTime.Today.Month`, even for past years (should be 12 for past years). |
-| B3 | Low | `TryParseBudgetType` is duplicated in three Application services and parses with exceptions (Humanizer `DehumanizeTo`). |
 
 ## Data and persistence
 
