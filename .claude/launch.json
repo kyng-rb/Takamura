@@ -12,6 +12,18 @@
       "runtimeExecutable": "dotnet",
       "runtimeArgs": ["run", "--project", "src/Takamura.Web", "--launch-profile", "http", "--no-build"],
       "port": 5102
+    },
+    {
+      "name": "api-local",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "set -a; . ./.env; set +a; exec dotnet run --project src/Takamura.API --launch-profile http --no-build"],
+      "port": 5240
+    },
+    {
+      "name": "web-local",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "exec dotnet run --project src/Takamura.Web --launch-profile http --no-build"],
+      "port": 5102
     }
   ]
 }
