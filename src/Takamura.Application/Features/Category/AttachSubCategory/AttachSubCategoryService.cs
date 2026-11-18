@@ -15,17 +15,17 @@ public class AttachSubCategoryService(DatabaseContext context)
     public async Task<Result<AttachSubCategoryOutput>> Handle(AttachSubCategoryServiceInput input, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(input.Description))
-            return Result.Fail("Entry description cannot be empty.");
+            return Result.Fail("Description is required");
 
         if (input.Description.Length > FieldLimits.TextMaxLength)
-            return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters.");
+            return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters");
 
         var category = await _context.Categories.FindAsync([input.CategoryId], cancellationToken).ConfigureAwait(false);
         if (category is null)
-            return Result.Fail("Category not found.");
+            return Result.Fail("Category does not exist");
 
         if (await _context.SubCategories.AnyAsync(x => x.CategoryId == input.CategoryId && x.Description == input.Description, cancellationToken).ConfigureAwait(false))
-            return Result.Fail("This category already has a subcategory with this description.");
+            return Result.Fail("This category already has a subcategory with this description");
 
         var subCategory = category.AttachSubCategory(input.Description);
         // The category is tracked (FindAsync), so only the new subcategory is inserted.

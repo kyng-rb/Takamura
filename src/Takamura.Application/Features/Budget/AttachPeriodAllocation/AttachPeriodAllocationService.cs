@@ -55,7 +55,7 @@ public class AttachPeriodAllocationService(DatabaseContext context)
             return Result.Fail("Type is required");
 
         if (!BudgetTypeParser.TryParse(input.Type, out var budgetType))
-            return Result.Fail($"Invalid type. Allowed values: {BudgetTypeParser.AllowedValues}");
+            return Result.Fail($"Type must be one of: {BudgetTypeParser.AllowedValues}");
 
         if (!await _context.Budgets.AnyAsync(b => b.Id == input.BudgetId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("Budget does not exist");

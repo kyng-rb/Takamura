@@ -33,16 +33,16 @@ public class CreateBillService(DatabaseContext context)
             return Result.Fail($"Amount can have at most {FieldLimits.MoneyDecimals} decimal places");
 
         if (string.IsNullOrWhiteSpace(input.Description))
-            return Result.Fail("Description must not be empty");
+            return Result.Fail("Description is required");
 
         if (input.Description.Length > FieldLimits.TextMaxLength)
             return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters");
 
         if (input.SubCategoryId <= 0)
-            return Result.Fail("SubCategoryId is required");
+            return Result.Fail("SubCategory id is required");
 
         if (input.BudgetId <= 0)
-            return Result.Fail("BudgetId is required");
+            return Result.Fail("Budget id is required");
 
         if (!await _context.SubCategories.AnyAsync(x => x.Id == input.SubCategoryId, cancellationToken).ConfigureAwait(false))
             return Result.Fail("SubCategory does not exist");
