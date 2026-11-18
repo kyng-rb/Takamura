@@ -28,7 +28,7 @@ public class AttachSubCategoryService(DatabaseContext context)
             return Result.Fail("This category already has a subcategory with this description.");
 
         var subCategory = category.AttachSubCategory(input.Description);
-        _context.Categories.Update(category);
+        // The category is tracked (FindAsync), so only the new subcategory is inserted.
         _ = await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         return Result.Ok(new AttachSubCategoryOutput(subCategory.Id));
     }
