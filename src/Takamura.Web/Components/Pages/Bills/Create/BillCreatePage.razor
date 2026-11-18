@@ -7,6 +7,13 @@
             <MudText Typo="Typo.body2" Class="dialog-subtitle">Minimal quick entry for the selected budget.</MudText>
         </div>
 
+        @if (!string.IsNullOrWhiteSpace(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Class="mb-4" ShowCloseIcon="true" CloseIconClicked="() => _errorMessage = null">
+                @_errorMessage
+            </MudAlert>
+        }
+
         @if (_loading)
         {
             <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>

@@ -78,19 +78,19 @@ public class CreateBudgetService(DatabaseContext context)
             var allocation = input.Allocations[i];
 
             if (allocation.Amount <= 0)
-                return Result.Fail($"Allocation amount must be greater than 0 on the {i + 1.Ordinalize()} allocation");
+                return Result.Fail($"Allocation amount must be greater than 0 on the {(i + 1).Ordinalize()} allocation");
 
             if (allocation.SubCategoryId <= 0)
-                return Result.Fail($"SubCategory id is required on the {i + 1.Ordinalize()} allocation");
+                return Result.Fail($"SubCategory id is required on the {(i + 1).Ordinalize()} allocation");
 
             if (!subCategoryIndexById.ContainsKey(allocation.SubCategoryId))
                 subCategoryIndexById[allocation.SubCategoryId] = i;
 
             if (string.IsNullOrWhiteSpace(allocation.Type))
-                return Result.Fail($"Type is required on the {i + 1.Ordinalize()} allocation");
+                return Result.Fail($"Type is required on the {(i + 1).Ordinalize()} allocation");
 
             if (!TryParseBudgetType(allocation.Type, out _))
-                return Result.Fail($"Invalid type on the {i + 1.Ordinalize()} allocation. Allowed values: Income, Outcome, Saving");
+                return Result.Fail($"Invalid type on the {(i + 1).Ordinalize()} allocation. Allowed values: Income, Outcome, Saving");
         }
 
         var subCategoryIds = subCategoryIndexById.Keys.ToArray();
@@ -104,7 +104,7 @@ public class CreateBudgetService(DatabaseContext context)
         foreach (var (subCategoryId, index) in subCategoryIndexById)
         {
             if (!existingSubCategorySet.Contains(subCategoryId))
-                return Result.Fail($"SubCategory does not exist on the {index + 1.Ordinalize()} allocation");
+                return Result.Fail($"SubCategory does not exist on the {(index + 1).Ordinalize()} allocation");
         }
 
         return Result.Ok();

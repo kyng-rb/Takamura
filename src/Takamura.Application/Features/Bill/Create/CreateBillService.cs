@@ -20,7 +20,7 @@ public class CreateBillService(DatabaseContext context)
         if (input.Amount <= 0)
             return Result.Fail("Amount must be greater than 0");
 
-        if (string.IsNullOrEmpty(input.Description))
+        if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Description must not be empty");
 
         if (input.SubCategoryId <= 0)

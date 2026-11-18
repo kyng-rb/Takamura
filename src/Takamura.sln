@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Takamura.API", "Takamura.AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Takamura.Application", "Takamura.Application\Takamura.Application.csproj", "{149F6D8D-9133-41FC-920C-63ACE370F0BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Takamura.Web", "Takamura.Web\Takamura.Web.csproj", "{DA7AF7C1-97CF-44A3-A40E-1DD80041A873}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{149F6D8D-9133-41FC-920C-63ACE370F0BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{149F6D8D-9133-41FC-920C-63ACE370F0BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{149F6D8D-9133-41FC-920C-63ACE370F0BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7AF7C1-97CF-44A3-A40E-1DD80041A873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7AF7C1-97CF-44A3-A40E-1DD80041A873}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7AF7C1-97CF-44A3-A40E-1DD80041A873}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7AF7C1-97CF-44A3-A40E-1DD80041A873}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

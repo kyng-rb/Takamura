@@ -1,5 +1,12 @@
 <MudDialog>
     <DialogContent>
+        @if (!string.IsNullOrWhiteSpace(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Class="mb-4" ShowCloseIcon="true" CloseIconClicked="() => _errorMessage = null">
+                @_errorMessage
+            </MudAlert>
+        }
+
         <MudForm @ref="_form">
             <MudText Typo="Typo.subtitle1" Class="mb-3">Category: @_categoryDescription</MudText>
             <MudTextField Label="Subcategory description"

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "api",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "src/Takamura.API", "--launch-profile", "http", "--no-build"],
+      "port": 5240
+    },
+    {
+      "name": "web",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "src/Takamura.Web", "--launch-profile", "http", "--no-build"],
+      "port": 5102
+    }
+  ]
+}
