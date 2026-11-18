@@ -8,7 +8,7 @@ public static class RetrieveBillsEndpoint
 {
     public static void Map(RouteGroupBuilder group)
     {
-        group.MapGet("/{id:int}/bill", async ([FromRoute] int id, [AsParameters] RetrieveBillsRequest input, [FromServices] RetrieveBillsService service, CancellationToken cancellationToken)
+        group.MapGet("/{id:int}/bills", async ([FromRoute] int id, [AsParameters] RetrieveBillsRequest input, [FromServices] RetrieveBillsService service, CancellationToken cancellationToken)
             => await service.Handle(input.ToServiceInput(id), cancellationToken).ToHttp())
             .Produces<RetrieveBillsOutput>()
             .ProducesProblem(StatusCodes.Status400BadRequest);

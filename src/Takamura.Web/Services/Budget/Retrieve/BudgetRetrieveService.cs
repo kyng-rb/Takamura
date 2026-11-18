@@ -26,7 +26,7 @@ public class BudgetRetrieveService
 
     public async Task<BudgetRetrieveOutput> Handle(CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest("api/budget");
+        var request = new RestRequest("api/budgets");
         var client = _httpFactory.CreateClient(ApiSettings.ApiName);
         var response = await client.ExecuteAsync<BudgetRetrieveOutput>(request, cancellationToken);
 

@@ -23,7 +23,7 @@ public class BillsCreateService
 
     public async Task Handle(BillsCreateServiceInput input, CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest($"api/budget/{input.BudgetId}/bill", Method.Post);
+        var request = new RestRequest($"api/budgets/{input.BudgetId}/bills", Method.Post);
         request.AddBody(new
         {
             input.Date,

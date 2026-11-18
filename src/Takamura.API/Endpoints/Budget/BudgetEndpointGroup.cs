@@ -10,7 +10,7 @@ using RetrievePeriodAllocations;
 
 public static class BudgetEndpointGroup
 {
-    private const string Section = "api/budget";
+    private const string Section = "api/budgets";
 
     public static void Map(WebApplication app)
     {

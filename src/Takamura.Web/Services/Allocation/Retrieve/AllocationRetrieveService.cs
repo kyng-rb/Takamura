@@ -33,7 +33,7 @@ public class AllocationRetrieveService
         int? year = null,
         CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest($"api/budget/{budgetId}/allocation");
+        var request = new RestRequest($"api/budgets/{budgetId}/allocations");
         if (year is not null)
             request.AddQueryParameter("Year", year.Value);
 

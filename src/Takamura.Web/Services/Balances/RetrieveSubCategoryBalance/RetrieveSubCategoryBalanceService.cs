@@ -32,7 +32,7 @@ public class RetrieveSubCategoryBalanceService
         int? month = null,
         CancellationToken cancellationToken = default)
     {
-        var request = new RestRequest($"api/budget/{budgetId}/allocation/subcategorybalance");
+        var request = new RestRequest($"api/budgets/{budgetId}/balances");
         if (year is not null)
             request.AddQueryParameter("Year", year.Value);
         if (month is not null)

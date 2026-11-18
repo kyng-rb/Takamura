@@ -16,7 +16,6 @@ Severity: **High** = data at risk or wrong numbers, **Medium** = wrong behaviour
 
 | # | Severity | Item |
 |---|----------|------|
-| B1 | Medium | `BillsRetrieveService` (Web) sends the category and subcategory **names** as `Category`/`Subcategory` query params; the API expects `CategoryId`/`SubCategoryId` ints, so those filters are silently ignored. |
 | B2 | Medium | Balances page: year-to-date always sums up to `DateTime.Today.Month`, even for past years (should be 12 for past years). |
 | B3 | Low | `TryParseBudgetType` is duplicated in three Application services and parses with exceptions (Humanizer `DehumanizeTo`). |
 
