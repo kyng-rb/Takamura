@@ -123,6 +123,10 @@ namespace Takamura.Application.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Title")
+                        .IsUnique()
+                        .HasFilter("[Status] <> 'Deleted'");
+
                     b.ToTable("Budget");
                 });
 
@@ -149,6 +153,10 @@ namespace Takamura.Application.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique()
+                        .HasFilter("[Status] <> 'Deleted'");
 
                     b.ToTable("Category");
                 });
@@ -196,9 +204,11 @@ namespace Takamura.Application.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BudgetId");
-
                     b.HasIndex("SubCategoryId");
+
+                    b.HasIndex("BudgetId", "SubCategoryId", "YearFrom", "MonthFrom")
+                        .IsUnique()
+                        .HasFilter("[Status] <> 'Deleted'");
 
                     b.ToTable("PeriodAllocation");
                 });
@@ -230,7 +240,9 @@ namespace Takamura.Application.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId", "Description")
+                        .IsUnique()
+                        .HasFilter("[Status] <> 'Deleted'");
 
                     b.ToTable("SubCategory");
                 });

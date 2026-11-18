@@ -10,5 +10,9 @@ public class SubCategoryEntityConfiguration: IEntityTypeConfiguration<SubCategor
         builder.HasOne(sc => sc.Category)
             .WithMany(c => c.SubCategories)
             .HasForeignKey(sc => sc.CategoryId);
+
+        builder.HasIndex(sc => new { sc.CategoryId, sc.Description })
+            .IsUnique()
+            .HasFilter(UniqueIndex.NotDeletedFilter);
     }
 }
