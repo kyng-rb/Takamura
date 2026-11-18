@@ -10,6 +10,7 @@ public static class RetrievePeriodAllocationsEndpoint
     {
         group.MapGet("/{id}/allocation", async ([FromRoute] int id, [AsParameters] RetrievePeriodAllocationRequest input, [FromServices] RetrievePeriodAllocationsService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp())
-            .Produces<RetrievePeriodAllocationsOutput>();
+            .Produces<RetrievePeriodAllocationsOutput>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

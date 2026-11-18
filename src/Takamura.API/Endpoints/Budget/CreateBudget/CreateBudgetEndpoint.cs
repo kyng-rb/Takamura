@@ -10,6 +10,7 @@ public static class CreateBudgetEndpoint
     {
         group.MapPost("/", async ([FromBody] CreateBudgetServiceInput input, [FromServices] CreateBudgetService service)
             => await service.Handle(input).ToCreated())
-            .Produces<CreateBudgetOutput>(StatusCodes.Status201Created);
+            .Produces<CreateBudgetOutput>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

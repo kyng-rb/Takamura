@@ -9,6 +9,7 @@ public static class CreateCategoryEndpoint
     {
         group.MapPost("/", async (CreateCategoryService service, CreateCategoryServiceInput input)
             => await service.Handle(input).ToCreated())
-            .Produces<CreateCategoryOutput>(StatusCodes.Status201Created);
+            .Produces<CreateCategoryOutput>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

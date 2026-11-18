@@ -10,6 +10,7 @@ public static class RetrieveBudgetsEndpoint
     {
         group.MapGet("/", async ([FromServices] RetrieveBudgetsService service)
             => await service.Handle().ToHttp())
-            .Produces<RetrieveBudgetsOutput>();
+            .Produces<RetrieveBudgetsOutput>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

@@ -10,6 +10,7 @@ public static class AttachPeriodAllocationEndpoint
     {
         group.MapPost("/{id}/allocation", async ([FromRoute] int id, [FromBody] AttachPeriodAllocationRequest input, [FromServices] AttachPeriodAllocationService service)
             => await service.Handle(input.ToServiceInput(id)).ToCreated())
-            .Produces<AttachPeriodAllocationOutput>(StatusCodes.Status201Created);
+            .Produces<AttachPeriodAllocationOutput>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

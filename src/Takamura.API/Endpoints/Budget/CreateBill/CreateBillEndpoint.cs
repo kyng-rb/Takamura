@@ -10,6 +10,7 @@ public static class CreateBillEndpoint
     {
         group.MapPost("/{id}/bill", async ([FromRoute] int id, [FromBody] CreateBillRequest input, [FromServices] CreateBillService service)
             => await service.Handle(input.ToServiceInput(id)).ToCreated())
-            .Produces<CreateBillOutput>(StatusCodes.Status201Created);
+            .Produces<CreateBillOutput>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

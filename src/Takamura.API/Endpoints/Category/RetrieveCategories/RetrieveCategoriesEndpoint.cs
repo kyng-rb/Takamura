@@ -9,6 +9,7 @@ public static class RetrieveCategoriesEndpoint
     {
         group.MapGet("/", async (RetrieveCategoriesService service)
             => await service.Handle().ToHttp())
-            .Produces<RetrieveCategoriesOutput>();
+            .Produces<RetrieveCategoriesOutput>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

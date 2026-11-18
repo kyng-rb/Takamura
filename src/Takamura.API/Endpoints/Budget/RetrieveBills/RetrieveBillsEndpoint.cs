@@ -10,6 +10,7 @@ public static class RetrieveBillsEndpoint
     {
         group.MapGet("/{id:int}/bill", async ([FromRoute] int id, [AsParameters] RetrieveBillsRequest input, [FromServices] RetrieveBillsService service)
             => await service.Handle(input.ToServiceInput(id)).ToHttp())
-            .Produces<RetrieveBillsOutput>();
+            .Produces<RetrieveBillsOutput>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }
