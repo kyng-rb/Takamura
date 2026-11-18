@@ -50,6 +50,9 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
         if (input.BudgetId <= 0)
             return Result.Fail("Invalid budget id");
 
+        if (input.Year.HasValue && (input.Year < FieldLimits.MinYear || input.Year > FieldLimits.MaxYear))
+            return Result.Fail($"Year must be between {FieldLimits.MinYear} and {FieldLimits.MaxYear}");
+
         if (input.Month.HasValue && (input.Month < 1 || input.Month > 12))
             return Result.Fail("Invalid month");
 
@@ -61,6 +64,9 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
 
             typeFilter = budgetType;
         }
+
+        if (!await _context.Budgets.AnyAsync(x => x.Id == input.BudgetId).ConfigureAwait(false))
+            return Result.Fail("Budget does not exist");
 
         var allocations = await GetRecords(input, typeFilter).ConfigureAwait(false);
 
@@ -92,6 +98,11 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
         return await allocations
             .Include(s => s.SubCategory)
             .ThenInclude(c => c!.Category)
+            .OrderBy(x => x.YearFrom)
+            .ThenBy(x => x.MonthFrom)
+            .ThenBy(x => x.SubCategory!.Category.Description)
+            .ThenBy(x => x.SubCategory!.Description)
+            .ThenBy(x => x.Id)
             .AsNoTracking()
             .ToListAsync()
             .ConfigureAwait(false);
