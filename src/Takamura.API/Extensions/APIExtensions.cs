@@ -6,6 +6,8 @@ namespace Takamura.API.Extensions;
 
 public static class ApiExtensions
 {
+    private const string ConnectionStringName = "TakamuraConnectionString";
+
     public static WebApplication ConfigureApi(this WebApplicationBuilder builder)
     {
         var app = builder.Build();
@@ -45,10 +47,15 @@ public static class ApiExtensions
                 context.ProblemDetails.Detail = badRequest.Message;
         });
 
-        var databaseConnectionString = builder.Configuration.GetConnectionString("TakamuraConnectionString");
+        var databaseConnectionString = builder.Configuration.GetConnectionString(ConnectionStringName);
+        if (string.IsNullOrWhiteSpace(databaseConnectionString))
+            throw new InvalidOperationException(
+                $"Connection string '{ConnectionStringName}' is missing. Set ConnectionStrings:{ConnectionStringName} " +
+                $"(or the ConnectionStrings__{ConnectionStringName} environment variable).");
+
         var isDevelopment = builder.Environment.IsDevelopment();
 
-        builder.Services.AddDatabaseContext(databaseConnectionString!, isDevelopment);
+        builder.Services.AddDatabaseContext(databaseConnectionString, isDevelopment);
         builder.Services.AddApplicationServices();
         return builder;
     }
