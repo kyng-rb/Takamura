@@ -8,7 +8,7 @@ public static class CreateCategoryEndpoint
     public static void Map(RouteGroupBuilder group)
     {
         group.MapPost("/", async (CreateCategoryService service, CreateCategoryServiceInput input)
-            => await service.Handle(input).ToHttp())
-            .Produces(StatusCodes.Status204NoContent);
+            => await service.Handle(input).ToCreated())
+            .Produces<CreateCategoryOutput>(StatusCodes.Status201Created);
     }
 }

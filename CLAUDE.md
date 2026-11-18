@@ -74,7 +74,7 @@ A feature is one slice across three layers. Names follow `<Verb><Thing>` with ve
 **API** — `Endpoints/<Group>/<Action>/<Action>Endpoint.cs` (+ `<Action>Request.cs` record with `ToServiceInput(routeId)`):
 - `public static class XEndpoint { public static void Map(RouteGroupBuilder group) { group.MapGet/MapPost(..., async (...) => await service.Handle(...).ToHttp()).Produces<...>(); } }`
 - Use `[FromRoute]`, `[FromBody]`, `[AsParameters]` (query), `[FromServices]`.
-- `.ToHttp()` (Extensions/HTTPExtensions.cs): `Result` → 204 / 400, `Result<T>` → 200 / 400; the 400 body is a JSON string of all error messages. Binding failures and unhandled exceptions return problem details (`AddProblemDetails` + `UseExceptionHandler`).
+- `.ToHttp()` (Extensions/HTTPExtensions.cs): `Result` → 204 / 400, `Result<T>` → 200 / 400; `.ToCreated()` for create services (`Result<XOutput>` with `record XOutput(int Id)`) → 201 `{ "id": n }` / 400; the 400 body is a JSON string of all error messages. Binding failures and unhandled exceptions return problem details (`AddProblemDetails` + `UseExceptionHandler`).
 - Wire it in the group file (`BudgetEndpointGroup` = `api/budget`, `CategoryEndpointGroup` = `api/category`). Bills and allocations are nested under a budget: `api/budget/{id}/bill`, `api/budget/{id}/allocation`.
 
 **Web** — the client mirrors the API with its own DTOs (do not reference Application):

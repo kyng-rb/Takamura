@@ -9,7 +9,7 @@ public static class CreateBudgetEndpoint
     public static void Map(RouteGroupBuilder group)
     {
         group.MapPost("/", async ([FromBody] CreateBudgetServiceInput input, [FromServices] CreateBudgetService service)
-            => await service.Handle(input).ToHttp())
-            .Produces(StatusCodes.Status204NoContent);
+            => await service.Handle(input).ToCreated())
+            .Produces<CreateBudgetOutput>(StatusCodes.Status201Created);
     }
 }

@@ -11,11 +11,13 @@ public record CreateBillServiceInput(DateOnly Date, decimal Amount, string Descr
         => BillEntity.Create(Date, Amount, Description, SubCategoryId, BudgetId);
 }
 
+public record CreateBillOutput(int Id);
+
 public class CreateBillService(DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
 
-    public async Task<Result> Handle(CreateBillServiceInput input)
+    public async Task<Result<CreateBillOutput>> Handle(CreateBillServiceInput input)
     {
         if (input.Amount <= 0)
             return Result.Fail("Amount must be greater than 0");
@@ -42,6 +44,6 @@ public class CreateBillService(DatabaseContext context)
 
         _context.Add(entity);
         _ = await _context.SaveChangesAsync().ConfigureAwait(false);
-        return Result.Ok();
+        return Result.Ok(new CreateBillOutput(entity.Id));
     }
 }
