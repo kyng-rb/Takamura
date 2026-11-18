@@ -55,7 +55,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<decimal>()
-            .HaveColumnType("decimal(18,2)");
+            .HaveColumnType($"decimal(18,{FieldLimits.MoneyDecimals})");
 
         configurationBuilder.Properties<string>()
             .HaveColumnType($"varchar({FieldLimits.TextMaxLength})");
