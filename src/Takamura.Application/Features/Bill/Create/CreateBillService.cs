@@ -22,6 +22,9 @@ public class CreateBillService(DatabaseContext context)
         if (input.Amount <= 0)
             return Result.Fail("Amount must be greater than 0");
 
+        if (decimal.Round(input.Amount, FieldLimits.MoneyDecimals) != input.Amount)
+            return Result.Fail($"Amount can have at most {FieldLimits.MoneyDecimals} decimal places");
+
         if (string.IsNullOrWhiteSpace(input.Description))
             return Result.Fail("Description must not be empty");
 

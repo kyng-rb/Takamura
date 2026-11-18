@@ -9,6 +9,9 @@ public static class FieldLimits
     /// <summary>Enums are stored as <c>varchar(EnumMaxLength)</c>.</summary>
     public const int EnumMaxLength = 20;
 
+    /// <summary>Money columns are <c>decimal(18, MoneyDecimals)</c>; more decimals would be rounded silently.</summary>
+    public const int MoneyDecimals = 2;
+
     /// <summary>Allowed range for budget years (allocations, balances).</summary>
     public const int MinYear = 2000;
 
