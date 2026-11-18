@@ -22,9 +22,7 @@ public class DatabaseContextFactory : IDesignTimeDbContextFactory<DatabaseContex
 
         var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
 
-        optionsBuilder.UseSqlServer(connectionString,
-            sqlOptions => sqlOptions
-                .EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), default));
+        optionsBuilder.UseTakamuraSqlServer(connectionString);
 
         // No sensitive data logging: this factory can point at the production database,
         // and parameter values would end up in the terminal.
