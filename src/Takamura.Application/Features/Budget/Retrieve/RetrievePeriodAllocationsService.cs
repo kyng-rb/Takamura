@@ -59,8 +59,8 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
         BudgetType? typeFilter = null;
         if (!string.IsNullOrWhiteSpace(input.Type))
         {
-            if (!TryParseBudgetType(input.Type, out var budgetType))
-                return Result.Fail("Invalid type. Allowed values: Income, Outcome, Saving");
+            if (!BudgetTypeParser.TryParse(input.Type, out var budgetType))
+                return Result.Fail($"Invalid type. Allowed values: {BudgetTypeParser.AllowedValues}");
 
             typeFilter = budgetType;
         }
@@ -106,19 +106,5 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
             .AsNoTracking()
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-    }
-
-    private static bool TryParseBudgetType(string value, out BudgetType type)
-    {
-        try
-        {
-            type = value.DehumanizeTo<BudgetType>();
-            return true;
-        }
-        catch
-        {
-            type = default;
-            return false;
-        }
     }
 }

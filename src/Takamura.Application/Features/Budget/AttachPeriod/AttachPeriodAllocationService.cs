@@ -1,5 +1,4 @@
 using FluentResults;
-using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Takamura.Application.Database;
 using Takamura.Application.Database.Entities.PeriodBudget;
@@ -61,8 +60,8 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         if (string.IsNullOrWhiteSpace(input.Type))
             return Result.Fail("Type is required");
 
-        if (!TryParseBudgetType(input.Type, out var budgetType))
-            return Result.Fail("Invalid type. Allowed values: Income, Outcome, Saving");
+        if (!BudgetTypeParser.TryParse(input.Type, out var budgetType))
+            return Result.Fail($"Invalid type. Allowed values: {BudgetTypeParser.AllowedValues}");
 
         var alreadyAllocated = await _context.PeriodAllocations
             .AnyAsync(x => x.BudgetId == input.BudgetId
@@ -78,19 +77,5 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         _ = await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         return Result.Ok(new AttachPeriodAllocationOutput(periodBudget.Id));
-    }
-
-    private static bool TryParseBudgetType(string value, out BudgetType type)
-    {
-        try
-        {
-            type = value.DehumanizeTo<BudgetType>();
-            return true;
-        }
-        catch
-        {
-            type = default;
-            return false;
-        }
     }
 }
