@@ -8,4 +8,9 @@ public static class FieldLimits
 
     /// <summary>Enums are stored as <c>varchar(EnumMaxLength)</c>.</summary>
     public const int EnumMaxLength = 20;
+
+    /// <summary>Allowed range for budget years (allocations, balances).</summary>
+    public const int MinYear = 2000;
+
+    public const int MaxYear = 2100;
 }

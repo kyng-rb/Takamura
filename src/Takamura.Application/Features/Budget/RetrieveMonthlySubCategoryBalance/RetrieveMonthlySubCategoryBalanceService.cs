@@ -42,8 +42,8 @@ public class RetrieveMonthlySubCategoryBalanceService(DatabaseContext context)
         if (input.BudgetId <= 0)
             return Result.Fail("Invalid budget id");
 
-        if (input.Year <= 0)
-            return Result.Fail("Invalid year");
+        if (input.Year is < FieldLimits.MinYear or > FieldLimits.MaxYear)
+            return Result.Fail($"Year must be between {FieldLimits.MinYear} and {FieldLimits.MaxYear}");
 
         if (input.Month.HasValue && (input.Month.Value < 1 || input.Month.Value > 12))
             return Result.Fail("Invalid month");

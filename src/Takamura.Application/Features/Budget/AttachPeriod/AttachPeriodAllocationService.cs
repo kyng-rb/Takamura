@@ -38,6 +38,12 @@ public class AttachPeriodAllocationService(DatabaseContext context)
         if (input.Description.Length > FieldLimits.TextMaxLength)
             return Result.Fail($"Description must be at most {FieldLimits.TextMaxLength} characters");
 
+        if (input.Month is < 1 or > 12)
+            return Result.Fail("Month must be between 1 and 12");
+
+        if (input.Year is < FieldLimits.MinYear or > FieldLimits.MaxYear)
+            return Result.Fail($"Year must be between {FieldLimits.MinYear} and {FieldLimits.MaxYear}");
+
         if (input.Amount <= 0)
             return Result.Fail("Amount must be greater than 0");
 
