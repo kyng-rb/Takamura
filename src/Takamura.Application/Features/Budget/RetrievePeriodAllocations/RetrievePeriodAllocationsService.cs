@@ -18,9 +18,9 @@ public record RetrievePeriodAllocationsOutput(IEnumerable<PeriodAllocationOutput
             x.YearFrom,
             x.Type.Humanize(),
             x.SubCategoryId,
-            x.SubCategory!.Description,
-            x.SubCategory!.CategoryId,
-            x.SubCategory!.Category.Description
+            x.SubCategory.Description,
+            x.SubCategory.CategoryId,
+            x.SubCategory.Category.Description
         ));
 
         return new RetrievePeriodAllocationsOutput(outputs);
@@ -90,18 +90,18 @@ public class RetrievePeriodAllocationsService(DatabaseContext context)
             allocations = allocations.Where(x => x.SubCategoryId == input.SubCategoryId.Value);
 
         if (input.CategoryId.HasValue)
-            allocations = allocations.Where(x => x.SubCategory!.CategoryId == input.CategoryId.Value);
+            allocations = allocations.Where(x => x.SubCategory.CategoryId == input.CategoryId.Value);
 
         if (typeFilter.HasValue)
             allocations = allocations.Where(x => x.Type == typeFilter.Value);
 
         return await allocations
             .Include(s => s.SubCategory)
-            .ThenInclude(c => c!.Category)
+            .ThenInclude(c => c.Category)
             .OrderBy(x => x.YearFrom)
             .ThenBy(x => x.MonthFrom)
-            .ThenBy(x => x.SubCategory!.Category.Description)
-            .ThenBy(x => x.SubCategory!.Description)
+            .ThenBy(x => x.SubCategory.Category.Description)
+            .ThenBy(x => x.SubCategory.Description)
             .ThenBy(x => x.Id)
             .AsNoTracking()
             .ToListAsync(cancellationToken)

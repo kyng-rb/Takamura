@@ -20,7 +20,7 @@ public class PeriodAllocationEntity : EntityBase
 
     public required int SubCategoryId { get; set; }
 
-    public SubCategoryEntity? SubCategory { get; set; }
+    public SubCategoryEntity SubCategory { get; set; } = null!;
 
     public required int BudgetId { get; set; }
 

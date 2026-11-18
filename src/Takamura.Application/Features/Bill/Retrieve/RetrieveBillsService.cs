@@ -27,7 +27,7 @@ public record BillOutput(
             billEntity.Description,
             billEntity.Amount,
             billEntity.Date,
-            billEntity.SubCategory!.Category.Description,
+            billEntity.SubCategory.Category.Description,
             billEntity.SubCategory.Description);
     }
 }
@@ -82,14 +82,17 @@ public class RetrieveBillsService(DatabaseContext context)
             query = query.Where(bill => bill.SubCategoryId == options.SubCategoryId);
 
         if (options.CategoryId is not null)
-            query = query.Where(bill => bill.SubCategory!.CategoryId == options.CategoryId);
+            query = query.Where(bill => bill.SubCategory.CategoryId == options.CategoryId);
 
-        query = query.Include(s => s.SubCategory)
-            .Include(s => s.SubCategory.Category)
-            .OrderBy(w => w.Date);
+        query = query
+            .Include(bill => bill.SubCategory)
+            .ThenInclude(subCategory => subCategory.Category)
+            .OrderBy(bill => bill.Date)
+            .ThenBy(bill => bill.Id);
 
         return await query
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
     }
 }
